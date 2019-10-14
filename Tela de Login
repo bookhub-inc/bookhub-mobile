@@ -1,0 +1,152 @@
+//Tela de Login contruída em Dart utilizando o FrameworkFlutter, versão 1.0(Grande chance de atualização)
+
+import "package:flutter/material.dart";
+
+class LoginScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(                    //função para material basico de design
+      body: Container(
+        padding: EdgeInsets.only(top: 30,left: 30, right: 30,), //defindo margem
+        color: Color(0xff2A236E),
+        child: ListView(
+          children: <Widget>[
+            Text(
+              "Bem Vindo ao BookHub",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
+            SizedBox(
+              height: 40,              //espaçamento entre o texto e imagem
+            ),
+            SizedBox(            //criando side box
+              width: 128,             //definindo tamnho da imagem dentro do container
+              height: 128,
+              child: Image.asset("assets/mascotero.png"),          //criando filho com a imagem em si
+            ),
+            SizedBox(   //criando outra sized box para dar um espaço entre a imageme o campo de email e senha
+              height: 40,
+            ),
+            TextFormField(                            //criando campo
+              keyboardType: TextInputType.emailAddress,//definindo o tipo email andresspara aparecer o @ no teclado
+              decoration: InputDecoration(
+                labelText: "Usuário ou E-mail",
+                labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,            //grossura do texto
+                  fontSize: 15,
+                ),
+              ),
+              style: TextStyle (                //definindo fonte do texto de entreada
+                  fontSize: 15,
+                  color: Colors.white,
+              ),
+            ),
+           SizedBox(
+             height: 10,
+           ),
+            TextFormField(
+              keyboardType: TextInputType.text,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Senha",
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,            //grossura do texto
+                  fontSize: 20,
+                )
+              ),
+              style: TextStyle (                //definindo fonte do texto de entreada
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          Container(                       //criando container para criação do botão de reset
+            height: 40,
+            alignment: Alignment.centerRight,
+            child: FlatButton(
+              child: Text(
+                "Recuperar Senha",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+              ),
+              onPressed: (){},          //definir para onde vai!!!!
+            ),
+          ),
+            SizedBox(
+              height: 20,
+            ),
+          Container(                        //container para botão de login
+            height: 60,
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(               //definindo um degrade Linear
+                begin: Alignment.topLeft,           //aabaixo temos os parametros do degrade
+                end: Alignment.bottomRight,
+                stops: [0.1,1],
+                colors: [
+                  Color(0xff7A74D4),
+                  Color(0xffedf1ff),
+                ],
+
+              ),
+            borderRadius: BorderRadius.all(                   //dando formato ao botão
+              Radius.circular(5),
+            )
+            ),
+          child: SizedBox.expand(
+            child: FlatButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, //função de alinhamento dos itens
+                children: <Widget>[
+                  Text("Entrar",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 20,
+              ),
+              textAlign: TextAlign.left,
+                  ),
+                Container(             //imagem para o container do botão
+                  child: SizedBox(
+                    child: Image.asset("assets/muse.png"), //definindo imagem e tamanho da mesma
+                    height: 40,
+                    width: 40,
+                  ),
+                )
+                ],
+              ),
+              onPressed: (){},          //definir para onde vai!!!!
+            ),
+          ),
+          ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(                       //criando container para criação do botão de reset
+              height: 40,
+              alignment: Alignment.center,
+              child: FlatButton(
+                child: Text(
+                  "Ainda não é cadastrado, Clique aqui",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: (){},          //definir para onde vai!!!!
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
