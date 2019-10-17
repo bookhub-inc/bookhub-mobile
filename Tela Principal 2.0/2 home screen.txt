@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:loja_virtual/Screens/principal.dart';
+import 'package:loja_virtual/tabs/home_tab.dart';
+import 'package:loja_virtual/tabs/teste.dart';
+import 'package:loja_virtual/widgets/custom_drawer.dart';
+
+class HomeScreen extends StatelessWidget{
+
+  final _pageController = PageController(); //definindo controle de paginas
+
+  @override
+  Widget build(BuildContext context) {
+
+
+    return PageView(                                 //criando pageView para passagem de telas da aplicação
+      controller: _pageController,                  //colocando o controle de paginas dentro do pageview para visualização
+      physics: NeverScrollableScrollPhysics(),      //comando para não passar para o lado de telas que são criadas
+      children: <Widget>[
+        Scaffold(                              //criando um scaffold para implementar o material basico de design// para implementar o Navigation Drawer
+          body: testetab(),                  //chamando no corpo do scaffold a hometab
+         // drawer: CustomDrawer(),           //chamando o drawer
+        )
+      ],
+    );
+  }
+
+
+}
