@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
+import 'package:Bookhub/tela_perfil.dart';
+import 'package:Bookhub/drawertile.dart';
+import 'package:Bookhub/login.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: Home(),
+    home: LoginScreen(),
   ));
 }
 
@@ -10,7 +13,6 @@ class Home extends StatefulWidget {
   @override
 
   _HomeState createState() => _HomeState();
-
 }
 
 class _HomeState extends State<Home> {
@@ -33,6 +35,17 @@ class _HomeState extends State<Home> {
     );
   }
 
+  IconButton iconBottom(IconData simbolo, Widget page) {
+    return IconButton(
+      icon: Icon(simbolo),
+    color: Colors.white,
+    onPressed: () {Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
+    },
+    );
+  }
   GestureDetector myTopic (Color color, String titulo) {
     return new GestureDetector(
       onTap: () {
@@ -52,6 +65,19 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    _buildDrawerBack() => Container(            //criando uma função e dando o nome de build Drawer Back
+      decoration: BoxDecoration(                       //dentro de um container eu defino um boxdecoration
+          gradient: LinearGradient(                      //em seguida um gradiente linear
+            colors: [
+              Color(0xff2A236E),
+              Color(0xff836FFF),                             //definindo cores em hexadecimal
+
+            ],
+            begin: Alignment.topLeft,                       //definindo onde começa
+            end: Alignment.bottomRight,                     //definindo onde termina
+          )
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text("Bookhub"),
@@ -63,27 +89,80 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
+      drawer: Drawer(                                     //criando a classe drawer
+        child: Stack(                                    //como o filho um stack para aparecer por cima da home tab
+          children: <Widget>[
+            _buildDrawerBack(),                           //chamando a função dentro do widget
+            ListView(                                     // criando listview para exibição de itens
+              padding: EdgeInsets.only(left: 32.0,top:0.0), //definindo espaçamento na borda a esquerda e no top do drawer
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: 0.0),              //definindo espaçamento entre o próximo conteudo listado
+                  padding: EdgeInsets.fromLTRB(0.0, 8.0, 16.0, 0.0),  //defindo margens dentro do container
+                  height: 250.0,
+                  child: Stack(                                    // criando um stack para que o texto exibido venha por cima do container caso futurammente precise colocar algo no container
+                    children: <Widget>[
+                      DrawerHeader(
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: <Widget>[
+                              Material(
+                                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                                child: Image.network(TelaPerfil().perfilimg, width: 120.0, height: 120.0,),
+
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      Container(
+                        padding: EdgeInsets.only(top: 165,left: 50, right: 30,), //defindo margem
+                        child: Column(
+                          children: <Widget>[
+                          Text("Nome da Pessoa",
+                          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                        Text("@username",
+                          style: TextStyle(fontSize: 15.0, color: Colors.white),
+                        ),
+                        ],
+                      ),
+                      ),
+                    ],
+                  ),
+
+                ),
+                Container(
+                    padding: EdgeInsets.only(top: 0,left: 0, right: 30,), //defindo margem
+                    child: Column(
+                      children: <Widget>[
+                        DrawerTile(Icons.book, "Cadastro de Livros", Home()),
+                        DrawerTile(Icons.chat, "Chat", Home()),//defindo os icones ddo drawer
+                        DrawerTile(Icons.settings, "Configuração", Home()),
+                        DrawerTile(Icons.help, "Ajuda", Home()),
+                        DrawerTile(Icons.exit_to_app, "Sair", LoginScreen()),
+                      ],
+                    )
+                ),
+
+              ],
+            )
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomAppBar(
         color: Color(0xff2A236E),
         child: new Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.menu),
-              color: Colors.white,
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.person),
-              color: Colors.white,
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.search),
-              color: Colors.white,
-              onPressed: () {},
-            ),
+            iconBottom(Icons.person, TelaPerfil()),
+            iconBottom(Icons.bookmark_border, Home()),
+            iconBottom(Icons.menu, Home()),
+            iconBottom(Icons.location_on, Home()),
+            iconBottom(Icons.toc, Home()),
           ],
         ),
       ),
