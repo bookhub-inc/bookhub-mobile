@@ -1,198 +1,198 @@
 import 'package:flutter/material.dart';
+import 'package:Bookhub/main.dart';
 
+class TelaCadastro extends StatelessWidget {
 
+  @override
+  Widget build(BuildContext context) {
+    Widget _buildDrawerBack() => Container(            //criando uma função e dando o nome de build Drawer Back
+      decoration: BoxDecoration(                       //dentro de um container eu defino um boxdecoration
+          gradient: LinearGradient(                      //em seguida um gradiente linear
+            colors: [
+              Color(0xff2A236E),
+              Color(0xff836FFF),                             //definindo cores em hexadecimal
 
-
-
-
-class RegScreen extends StatelessWidget {
-
-      @override
-      Widget build(BuildContext context) {
-        Widget _buildDrawerBack() => Container(            //criando uma função e dando o nome de build Drawer Back
-          decoration: BoxDecoration(                       //dentro de um container eu defino um boxdecoration
-              gradient: LinearGradient(                      //em seguida um gradiente linear
-                colors: [
-                  Color(0xff2A236E),
-                  Color(0xff836FFF),                             //definindo cores em hexadecimal
-
-                ],
-                begin: Alignment.topLeft,                       //definindo onde começa
-                end: Alignment.bottomCenter,                     //definindo onde termina
-              )
-          ),
-        );
-      return Scaffold(
-        body: Stack(
+            ],
+            begin: Alignment.topLeft,                       //definindo onde começa
+            end: Alignment.bottomCenter,                     //definindo onde termina
+          )
+      ),
+    );
+    return Scaffold(
+      body: Stack(
           children: <Widget>[
             _buildDrawerBack(),
             Container(
                 padding: EdgeInsets.only(top: 20,left: 20, right: 20,), //defindo margem
-              child: ListView(
-                children: <Widget>[
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    child: Text(
-                      "Seja bem-vindo ao BookHub",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
+                child: ListView(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 40,
                     ),
-
-                  ),
-                  SizedBox(
-                    height: 50,              //espaçamento entre o texto e imagem
-                  ),
-                  Container(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        labelText: "Nome",
-                        labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,            //grossura do texto
-                          fontSize: 15,
-                        ),
-                      ),
-                      style: TextStyle (                //definindo fonte do texto de entreada
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        labelText: "Usuário",
-                        labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,            //grossura do texto
-                          fontSize: 15,
-                        ),
-                      ),
-                      style: TextStyle (                //definindo fonte do texto de entreada
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        labelText: "Telefone",
-                        labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,            //grossura do texto
-                          fontSize: 15,
-                        ),
-                      ),
-                      style: TextStyle (                //definindo fonte do texto de entreada
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                        ),
-                        labelText: "E-mail",
-                        labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,            //grossura do texto
-                          fontSize: 15,
-                        ),
-                      ),
-                      style: TextStyle (                //definindo fonte do texto de entreada
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    child: TextFormField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                        ),
-                        labelText: "Senha",
-                        labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,            //grossura do texto
-                          fontSize: 15,
-                        ),
-                      ),
-                      style: TextStyle (                //definindo fonte do texto de entreada
-                        fontSize: 15,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 10,left: 55, right: 55,), //defindo margem
-                    child: Container(                        //container para botão de login
-                      height: 60,
-                      decoration: BoxDecoration(
-                          color: Color(0xff2A236E),
-                          borderRadius: BorderRadius.all(                   //dando formato ao botão
-                            Radius.circular(5),
-                          )
-                      ),
-                    child: FlatButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "Cadastrar",
-                          style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                    Container(
+                      child: Text(
+                        "Seja bem-vindo ao BookHub",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
-                          ),
-
-                          )
-                        ],
+                        ),
                       ),
-                      onPressed: (){
-                      },          //definir para onde vai!!!!
-                    ),
-                    ),
-                  ),
-                ],
-              )
-              ),
-        ]
-        ),
-      );
 
-      }
-    }
+                    ),
+                    SizedBox(
+                      height: 50,              //espaçamento entre o texto e imagem
+                    ),
+                    Container(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          labelText: "Nome",
+                          labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,            //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle (                //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          labelText: "Usuário",
+                          labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,            //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle (                //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          labelText: "Telefone",
+                          labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,            //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle (                //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                          ),
+                          labelText: "E-mail",
+                          labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,            //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle (                //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: TextFormField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                          ),
+                          labelText: "Senha",
+                          labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,            //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle (                //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 10,left: 55, right: 55,), //defindo margem
+                      child: Container(                        //container para botão de login
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: Color(0xff2A236E),
+                            borderRadius: BorderRadius.all(                   //dando formato ao botão
+                              Radius.circular(5),
+                            )
+                        ),
+                        child: FlatButton(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Cadastrar",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+
+                              )
+                            ],
+                          ),
+                          onPressed: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Home()),
+                            );
+                          },          //definir para onde vai!!!!
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+            ),
+          ]
+      ),
+    );
+
+  }
+}
