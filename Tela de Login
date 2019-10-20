@@ -1,8 +1,9 @@
-//Tela de Login contruída em Dart utilizando o FrameworkFlutter, versão 1.0(Grande chance de atualização)
-
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
+import 'package:Bookhub/main.dart';
+import 'package:Bookhub/cadastro.dart';
 
 class LoginScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(                    //função para material basico de design
@@ -12,23 +13,24 @@ class LoginScreen extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             Text(
-              "Bem Vindo ao BookHub",
+              "Bem vindo ao Bookhub",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 25,
+                fontSize: 14,
+                fontFamily: 'Tahoma'
               ),
             ),
             SizedBox(
               height: 40,              //espaçamento entre o texto e imagem
             ),
             SizedBox(            //criando side box
-              width: 128,             //definindo tamnho da imagem dentro do container
-              height: 128,
-              child: Image.asset("assets/mascotero.png"),          //criando filho com a imagem em si
+              width: 150,             //definindo tamnho da imagem dentro do container
+              height: 150,
+              child: Image.network("https://i.imgur.com/V2CfTHR.png"),          //criando filho com a imagem em si
             ),
             SizedBox(   //criando outra sized box para dar um espaço entre a imageme o campo de email e senha
-              height: 40,
+              height: 10,
             ),
             TextFormField(                            //criando campo
               keyboardType: TextInputType.emailAddress,//definindo o tipo email andresspara aparecer o @ no teclado
@@ -41,90 +43,95 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               style: TextStyle (                //definindo fonte do texto de entreada
-                  fontSize: 15,
-                  color: Colors.white,
+                fontSize: 15,
+                color: Colors.white,
               ),
             ),
-           SizedBox(
-             height: 10,
-           ),
+            SizedBox(
+              height: 10,
+            ),
             TextFormField(
               keyboardType: TextInputType.text,
               obscureText: true,
               decoration: InputDecoration(
-                labelText: "Senha",
-                labelStyle: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,            //grossura do texto
-                  fontSize: 20,
-                )
+                  labelText: "Senha",
+                  labelStyle: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,            //grossura do texto
+                    fontSize: 15,
+                  )
               ),
               style: TextStyle (                //definindo fonte do texto de entreada
                 fontSize: 20,
                 color: Colors.white,
               ),
             ),
-          Container(                       //criando container para criação do botão de reset
-            height: 40,
-            alignment: Alignment.centerRight,
-            child: FlatButton(
-              child: Text(
-                "Recuperar Senha",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+            Container(                       //criando container para criação do botão de reset
+              height: 40,
+              alignment: Alignment.centerRight,
+              child: FlatButton(
+                child: Text(
+                  "Recuperar Senha",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: (){},          //definir para onde vai!!!!
               ),
-              onPressed: (){},          //definir para onde vai!!!!
             ),
-          ),
             SizedBox(
               height: 20,
             ),
-          Container(                        //container para botão de login
-            height: 60,
-            alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(               //definindo um degrade Linear
-                begin: Alignment.topLeft,           //aabaixo temos os parametros do degrade
-                end: Alignment.bottomRight,
-                stops: [0.1,1],
-                colors: [
-                  Color(0xff7A74D4),
-                  Color(0xffedf1ff),
-                ],
+            Container(                        //container para botão de login
+              height: 60,
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(               //definindo um degrade Linear
+                    begin: Alignment.topLeft,           //aabaixo temos os parametros do degrade
+                    end: Alignment.bottomRight,
+                    stops: [0.1,1],
+                    colors: [
+                      Color(0xff7A74D4),
+                      Color(0xffedf1ff),
+                    ],
 
-              ),
-            borderRadius: BorderRadius.all(                   //dando formato ao botão
-              Radius.circular(5),
-            )
-            ),
-          child: SizedBox.expand(
-            child: FlatButton(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, //função de alinhamento dos itens
-                children: <Widget>[
-                  Text("Entrar",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 20,
-              ),
-              textAlign: TextAlign.left,
                   ),
-                Container(             //imagem para o container do botão
-                  child: SizedBox(
-                    child: Image.asset("assets/muse.png"), //definindo imagem e tamanho da mesma
-                    height: 40,
-                    width: 40,
-                  ),
-                )
-                ],
+                  borderRadius: BorderRadius.all(                   //dando formato ao botão
+                    Radius.circular(5),
+                  )
               ),
-              onPressed: (){},          //definir para onde vai!!!!
+              child: SizedBox.expand(
+                child: FlatButton(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween, //função de alinhamento dos itens
+                    children: <Widget>[
+                      Text("Entrar",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      Container(             //imagem para o container do botão
+                        child: SizedBox(
+                          child: Image.network("https://i.imgur.com/udehoET.jpg"), //definindo imagem e tamanho da mesma
+                          height: 40,
+                          width: 40,
+                        ),
+                      )
+                    ],
+                  ),
+                  onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                    );
+                  },          //definir para onde vai!!!!
+                ),
+              ),
             ),
-          ),
-          ),
             SizedBox(
               height: 20,
             ),
@@ -139,7 +146,12 @@ class LoginScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                onPressed: (){},          //definir para onde vai!!!!
+                onPressed: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TelaCadastro()),
+                  );
+                },          //definir para onde vai!!!!
               ),
             ),
           ],
@@ -148,5 +160,3 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-
-
