@@ -1,162 +1,184 @@
 import 'package:flutter/material.dart';
-import 'package:Bookhub/main.dart';
-import 'package:Bookhub/cadastro.dart';
+import 'package:bookhub_app/main.dart';
+import 'package:bookhub_app/telacadastro.dart';
+
 
 class LoginScreen extends StatelessWidget {
+
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(                    //função para material basico de design
-      body: Container(
-        padding: EdgeInsets.only(top: 30,left: 30, right: 30,), //defindo margem
-        color: Color(0xff2A236E),
-        child: ListView(
-          children: <Widget>[
-            Text(
-              "Bem vindo ao Bookhub",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontFamily: 'Tahoma'
-              ),
-            ),
-            SizedBox(
-              height: 40,              //espaçamento entre o texto e imagem
-            ),
-            SizedBox(            //criando side box
-              width: 150,             //definindo tamnho da imagem dentro do container
-              height: 150,
-              child: Image.network("https://i.imgur.com/V2CfTHR.png"),          //criando filho com a imagem em si
-            ),
-            SizedBox(   //criando outra sized box para dar um espaço entre a imageme o campo de email e senha
-              height: 10,
-            ),
-            TextFormField(                            //criando campo
-              keyboardType: TextInputType.emailAddress,//definindo o tipo email andresspara aparecer o @ no teclado
-              decoration: InputDecoration(
-                labelText: "Usuário ou E-mail",
-                labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,            //grossura do texto
-                  fontSize: 15,
-                ),
-              ),
-              style: TextStyle (                //definindo fonte do texto de entreada
-                fontSize: 15,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.text,
-              obscureText: true,
-              decoration: InputDecoration(
-                  labelText: "Senha",
-                  labelStyle: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,            //grossura do texto
-                    fontSize: 15,
-                  )
-              ),
-              style: TextStyle (                //definindo fonte do texto de entreada
-                fontSize: 20,
-                color: Colors.white,
-              ),
-            ),
-            Container(                       //criando container para criação do botão de reset
-              height: 40,
-              alignment: Alignment.centerRight,
-              child: FlatButton(
-                child: Text(
-                  "Recuperar Senha",
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: Colors.white,
+        body: Container(
+            padding: EdgeInsets.only(top: 30,left: 30, right: 30,), //defindo margem
+            color: Color(0xff2A236E),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: <Widget>[
+                  Text(
+                    "Bem vindo ao Bookhub",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontFamily: 'Tahoma'
+                    ),
                   ),
-                ),
-                onPressed: (){},          //definir para onde vai!!!!
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(                        //container para botão de login
-              height: 60,
-              alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(               //definindo um degrade Linear
-                    begin: Alignment.topLeft,           //aabaixo temos os parametros do degrade
-                    end: Alignment.bottomRight,
-                    stops: [0.1,1],
-                    colors: [
-                      Color(0xff7A74D4),
-                      Color(0xffedf1ff),
-                    ],
-
+                  SizedBox(
+                    height: 40,              //espaçamento entre o texto e imagem
                   ),
-                  borderRadius: BorderRadius.all(                   //dando formato ao botão
-                    Radius.circular(5),
-                  )
-              ),
-              child: SizedBox.expand(
-                child: FlatButton(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween, //função de alinhamento dos itens
-                    children: <Widget>[
-                      Text("Entrar",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
-                        textAlign: TextAlign.left,
+                  SizedBox(            //criando side box
+                    width: 150,             //definindo tamnho da imagem dentro do container
+                    height: 150,
+                    child: Image.network("https://i.imgur.com/V2CfTHR.png"),          //criando filho com a imagem em si
+                  ),
+                  SizedBox(   //criando outra sized box para dar um espaço entre a imageme o campo de email e senha
+                    height: 10,
+                  ),
+                  TextFormField(                            //criando campo
+                    keyboardType: TextInputType.emailAddress,//definindo o tipo email andresspara aparecer o @ no teclado
+                    decoration: InputDecoration(
+                      labelText: "Usuário ou E-mail",
+                      labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,            //grossura do texto
+                        fontSize: 15,
                       ),
-                      Container(             //imagem para o container do botão
-                        child: SizedBox(
-                          child: Image.network("https://i.imgur.com/udehoET.jpg"), //definindo imagem e tamanho da mesma
-                          height: 40,
-                          width: 40,
+                    ),
+                    style: TextStyle (                //definindo fonte do texto de entreada
+                      fontSize: 15,
+                      color: Colors.white,
+                    ),
+                    validator: (text){
+                      if (text.isEmpty) return "Preencha o campo!";
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                        labelText: "Senha",
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,            //grossura do texto
+                          fontSize: 15,
+                        )
+                    ),
+                    style: TextStyle (                //definindo fonte do texto de entreada
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                    validator: (text){
+                      if (text.isEmpty || text.length < 6 ) return "Senha Inválida";
+                    },
+                  ),
+                  Container(                       //criando container para criação do botão de reset
+                    height: 40,
+                    alignment: Alignment.centerRight,
+                    child: FlatButton(
+                      child: Text(
+                        "Recuperar Senha",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Colors.white,
                         ),
-                      )
-                    ],
+                      ),
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => TelaCadastro()),
+                        );
+                      },           //definir para onde vai!!!!
+                    ),
                   ),
-                  onPressed: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Home()),
-                    );
-                  },          //definir para onde vai!!!!
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(                       //criando container para criação do botão de reset
-              height: 40,
-              alignment: Alignment.center,
-              child: FlatButton(
-                child: Text(
-                  "Ainda não é cadastrado, Clique aqui",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-                onPressed: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TelaCadastro()),
-                  );
-                },          //definir para onde vai!!!!
+                  Container(                        //container para botão de login
+                    height: 60,
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(               //definindo um degrade Linear
+                          begin: Alignment.topLeft,           //aabaixo temos os parametros do degrade
+                          end: Alignment.bottomRight,
+                          stops: [0.1,1],
+                          colors: [
+                            Color(0xff7A74D4),
+                            Color(0xffedf1ff),
+                          ],
+
+                        ),
+                        borderRadius: BorderRadius.all(                   //dando formato ao botão
+                          Radius.circular(5),
+                        )
+                    ),
+                    child: SizedBox.expand(
+                      child: FlatButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween, //função de alinhamento dos itens
+                          children: <Widget>[
+                            Text("Entrar",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Container(             //imagem para o container do botão
+                              color: Colors.transparent,
+                              child: SizedBox(
+                                child: Image.network("https://i.imgur.com/udehoET.jpg"), //definindo imagem e tamanho da mesma
+                                height: 40,
+                                width: 40,
+                              ),
+                            )
+                          ],
+                        ),
+                        onPressed: (){
+                          if(_formKey.currentState.validate()){
+                          } else 
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+
+                          );
+                        },          //definir para onde vai!!!!
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(                       //criando container para criação do botão de reset
+                    height: 40,
+                    alignment: Alignment.center,
+                    child: FlatButton(
+                      child: Text(
+                        "Ainda não é cadastrado, Clique aqui",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => TelaCadastro()),
+                        );
+                      },          //definir para onde vai!!!!
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
+            )
+        )
     );
   }
 }
