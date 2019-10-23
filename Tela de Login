@@ -143,12 +143,13 @@ class LoginScreen extends StatelessWidget {
                         ),
                         onPressed: (){
                           if(_formKey.currentState.validate()){
-                          } else 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()),
 
-                          );
+                            );
+                          } else
+                            print("magoou meus sentimentos",);
                         },          //definir para onde vai!!!!
                       ),
                     ),
