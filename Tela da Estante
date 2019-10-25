@@ -3,20 +3,52 @@ import 'package:bookhub/DrawerTile.dart';
 import 'package:bookhub/main.dart';
 import 'package:bookhub/TelaPerfil.dart';
 import 'package:bookhub/LoginScreen.dart';
-import 'package:flutter/material.dart' as prefix0;
 
 
 class bookcase extends StatelessWidget {
   @override
 
-  Future <String> createDialog(BuildContext context){
+
+
+
+  Future <String> bookcaseDialog(BuildContext context){
 
     TextEditingController customController = new TextEditingController();
 
     return showDialog(context: context,builder: (context){
       return AlertDialog(
         title: Text(
-          "Adicionar livro a estante"
+            "Informações sobre o Livro"
+        ),
+        content:
+        Text(
+          "Título: Textos Cruéis Demais para Serem Lidos Rapidamente"
+              "\nSinopse: Atende douglas?"
+              "\nAutor: Jãozin"
+              "\nEditora: Me precupa a implementação com o Backend e BD"
+              "\nGenero: Não me julgue"
+              "\nClassificação: Sem chororo"
+              "\nTema: Nozes que lute",
+
+        ),
+      );
+    });
+  }
+
+
+
+
+
+
+
+  Future <String> searchDialog(BuildContext context){
+
+    TextEditingController customController = new TextEditingController();
+
+    return showDialog(context: context,builder: (context){
+      return AlertDialog(
+        title: Text(
+            "Pesquisar Livro"
         ),
         content: TextFormField(
           controller: customController,
@@ -31,10 +63,46 @@ class bookcase extends StatelessWidget {
         ),
         actions: <Widget>[
           MaterialButton(
-           elevation: 5.0,
+            elevation: 5.0,
+            child: Text("Procurar"),
+            onPressed: (){
+              Navigator.of(context).pop(customController.text.toString());
+
+            },
+          ),
+        ],
+      );
+    });
+  }
+
+
+
+  Future <String> createDialog(BuildContext context){
+
+    TextEditingController customController = new TextEditingController();
+
+    return showDialog(context: context,builder: (context){
+      return AlertDialog(
+        title: Text(
+            "Adicionar livro a estante"
+        ),
+        content: TextFormField(
+          controller: customController,
+          decoration: InputDecoration(
+            labelText: "Nome do Livro",
+            labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
+              color: Colors.black,
+              fontWeight: FontWeight.w400,            //grossura do texto
+              fontSize: 15,
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            elevation: 5.0,
             child: Text("Adicionar Livro"),
             onPressed: (){
-            Navigator.of(context).pop(customController.text.toString());
+              Navigator.of(context).pop(customController.text.toString());
 
             },
           ),
@@ -112,234 +180,160 @@ class bookcase extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () {print("elas que lutem");},
+            onPressed: () {
+              searchDialog(context).then((onValue){
+                SnackBar mySnackbar = SnackBar(content: Text("Resultado da Pesquisa $onValue"));
+                Scaffold.of(context).showSnackBar(mySnackbar);
+              });
+            },
           ),
         ],
       ),
       body: Stack(
         children: <Widget>[
           _buildBodyBack(),
-          Container(
-              padding: EdgeInsets.only(top: 20,left: 20, right: 20,), //defindo margem
-              child: ListView(
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Row(
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                height: 180,
-                                width: 110,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image1),
-                                  ),
-                                ),
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image2),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image3),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image4),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image13),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image5),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image6),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image7),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image8),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image14),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image9),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image10),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image11),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image12),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                              Divider(
-                                height: 20,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(image15),
-                                  ),
-                                ),
-                                height: 180,
-                                width: 110,
-                              ),
-                            ],
-                          ),
-
-                        ],
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 30, left: 20, right: 20),
+                  height: 170,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal, 
+                    children: <Widget>[
+                      FlatButton(
+                        child: Image.network(image1),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    )
-                  ]
-              )
+                     // Image.network(image1),
+                      FlatButton(
+                        child: Image.network(image2),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      FlatButton(
+                        child: Image.network(image3),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      FlatButton(
+                        child: Image.network(image4),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      FlatButton(
+                        child: Image.network(image5),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  height: 170,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      FlatButton(
+
+                        child: Image.network(image6),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      // Image.network(image1),
+                      FlatButton(
+                        child: Image.network(image7),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      FlatButton(
+                        child: Image.network(image8),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      FlatButton(
+                        child: Image.network(image9),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      FlatButton(
+                        child: Image.network(image10),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  height: 170,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Image.network(image11),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      // Image.network(image1),
+                      FlatButton(
+                        child: Image.network(image12),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      FlatButton(
+                        child: Image.network(image13),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      FlatButton(
+                        child: Image.network(image14),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                      FlatButton(
+                        child: Image.network(image15),
+                        onPressed: (){
+                          bookcaseDialog(context).then((onValue){
+                          });
+                        } ,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           Align(
             alignment: Alignment.bottomRight,
@@ -350,8 +344,8 @@ class bookcase extends StatelessWidget {
 
               onPressed: (){
                 createDialog(context).then((onValue){
-                 SnackBar mySnackbar = SnackBar(content: Text("Livro adicionado $onValue"));
-                 Scaffold.of(context).showSnackBar(mySnackbar);
+                  SnackBar mySnackbar = SnackBar(content: Text("Livro adicionado $onValue"));
+                  Scaffold.of(context).showSnackBar(mySnackbar);
                 });
               } ,
             ),
