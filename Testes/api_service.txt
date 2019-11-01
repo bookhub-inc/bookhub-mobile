@@ -1,0 +1,17 @@
+import 'dart:convert';
+import 'package:bookhubunip/main.dart';
+import 'package:http/http.dart' as http;
+
+//Métodos GET, POST, PUT, DELETE
+
+class ApiService{
+  static Future<List<dynamic>> getUserList() async {
+   final response =  await http.get('${Urls.BASE_API_URL}/users');
+   if (response.statusCode == 200){
+   return json.decode(response.body);
+
+   } else{
+     return null;
+   }
+  }
+}
