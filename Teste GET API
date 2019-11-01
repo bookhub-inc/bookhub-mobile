@@ -1,3 +1,5 @@
+//Aqui foi implementada uma função que a partir dos dados de um endpoint da API, ele faz um get dos dados do mesmo e exibe na tela.
+
 
 import 'dart:async';
 import 'dart:convert';
