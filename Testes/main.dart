@@ -1,9 +1,9 @@
-//junto com a classe api_service, foi criada uma função para verificar os users que estão no endpoint e validaar em uma tela de login
-
 import 'package:bookhubunip/api_service.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
+
+String userId;
 
 class Urls {
   static const BASE_API_URL = "https://jsonplaceholder.typicode.com";
@@ -21,14 +21,14 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
+bool _isLoading = false;
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  bool _isLoading = false;
+
   TextEditingController _usernameController = new TextEditingController();
 
   @override
@@ -83,8 +83,9 @@ class _LoginState extends State<Login> {
                             });
                         return;
                       } else {
-                        final userWithUsernameExists = users.any(
-                            (u) => u['username'] == _usernameController.text);
+                        final user = users.where((u) => u['username'] == _usernameController.text).first;
+                        final userWithUsernameExists = user != null;
+                        userId = user['Id'].toString();
                         if (userWithUsernameExists) {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) => Post()));
@@ -119,6 +120,221 @@ class _LoginState extends State<Login> {
 class Post extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add_circle),
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NewPost(),
+            )
+
+          );
+        },
+      ),
+      appBar: AppBar(title: Text("Posts"),),
+      body: FutureBuilder(
+        future: ApiService.getPostList(),
+        builder: (context, snapshot){
+         if(snapshot.connectionState == ConnectionState.done){
+           final posts = snapshot.data;
+           return ListView.separated(
+             separatorBuilder: (context, index){
+               return Divider(height: 2, color: Colors.black,);
+             },
+             itemBuilder: (context, index){
+               return ListTile(
+                 title: Text(
+                   posts[index]['title'],
+                   style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                 ),
+                 subtitle: Text(posts[index]['body']),
+                 onTap:(){
+                   Navigator.push(
+                     context,
+                     MaterialPageRoute(
+                     builder: (context) => Posts(posts[index]['id']),
+                     )
+                   );
+                 },
+               );
+             },
+             itemCount: posts.length,
+           );
+         }
+         return Center(child: CircularProgressIndicator(),);
+        }
+      ),
+    );
   }
 }
+
+class Posts extends StatelessWidget {
+  final int _id;
+
+  Posts(this._id);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+    appBar: AppBar(title: Text("Post"),),
+      body: Column(
+        children: <Widget>[
+          FutureBuilder(
+            future: ApiService.getPost(_id),
+            builder: (context,snapshot){
+              if (snapshot.connectionState == ConnectionState.done){
+                return Column(
+                  children: <Widget>[
+                    Text(
+                      snapshot.data['title'],
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text(snapshot.data['body']),
+                  ],
+                );
+            }
+              return Center(child: CircularProgressIndicator(),);
+           }
+          ),
+          Container(height: 20,),
+          Divider(color: Colors.black, height: 3,),
+          Container(height: 20,),
+          FutureBuilder(
+            future: ApiService.getCommentsForPost(_id),
+            builder:  (context, snapshot){
+              if (snapshot.connectionState == ConnectionState.done){
+                final comments = snapshot.data;
+                return Expanded(
+                  child: ListView.separated(
+                    separatorBuilder: (context,index) => Divider(
+                      height: 2,
+                      color: Colors.black,
+                    ),
+                    itemBuilder: (context, index){
+                      return ListTile(
+                        title: Text(
+                          comments[index]['name'],
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(comments[index]['body']),
+                      );
+                    },
+                   itemCount: comments.length,
+                  ),
+                );
+              }
+              return Center(child: CircularProgressIndicator(),);
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+class NewPost extends StatefulWidget {
+  @override
+  _NewPostState createState() => _NewPostState();
+}
+
+class _NewPostState extends State<NewPost>{
+  final _titleController = TextEditingController();
+  final _bodyController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(title: Text("New post")),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TextField(
+              controller: _titleController,
+              decoration: InputDecoration(hintText: 'title')
+          ),
+          TextField(
+              controller: _bodyController,
+              decoration: InputDecoration(hintText: 'body')
+          ),
+          Container(height: 20,),
+          _isLoading ? CircularProgressIndicator():
+          SizedBox(
+            height: 50,
+            width: double.infinity,
+          child: RaisedButton(
+            color: Colors.blue,
+            child: Text("Submit",style: TextStyle(color: Colors.white)),
+            onPressed: (){
+            if  (_titleController.text.isEmpty || _bodyController.text.isEmpty){
+              showDialog(
+                builder: (context) => AlertDialog(
+                  title: Text("Failure"),
+                  content: Text("You need to input the title and the body of the post"),
+                  actions: <Widget>[FlatButton(
+                      onPressed: (){Navigator.pop(context);},
+                      child: Text("Ok"),
+                    )],
+                ),
+               context: context
+              );
+              return;
+            }
+            final post = {
+              'title': _titleController.text,
+              'body':  _bodyController.text,
+              'userId': userId
+            };
+            setState(() {
+              _isLoading = true;
+            });
+            ApiService.addPost(post).then((sucess){
+              setState(() {
+                _isLoading = false;
+              });
+              String title, text;
+              if(sucess){
+                title = "Sucess";
+                text = "Your post has been successful submitted";
+              }else{
+                title = "Error";
+                text = "An error occurred while submitting your post";
+              }
+              showDialog(
+                builder: (context) => AlertDialog(
+                  title: Text(title),
+                  content: Text(text),
+                  actions: <Widget>[
+                    FlatButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      child: Text("Ok"),
+                    )
+                  ],
+                ),
+                    context: context
+              );
+            });
+            },
+          )
+          )
+        ],
+      ),
+      )
+    );
+  }
+}
+
+
+
