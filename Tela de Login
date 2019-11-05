@@ -1,16 +1,26 @@
+import 'package:bookhubunip/Login.dart';
+import 'package:bookhubunip/api.dart';
 import 'package:flutter/material.dart';
-import 'package:bookhub_app/main.dart';
-import 'package:bookhub_app/telacadastro.dart';
+
+import 'main.dart';
+
+
+final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 
 class LoginScreen extends StatelessWidget {
 
+  TextEditingController usuarioController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+
+    bool _isLoading = false;
     return Scaffold(                    //função para material basico de design
+        key: _scaffoldKey,
         body: Container(
             padding: EdgeInsets.only(top: 30,left: 30, right: 30,), //defindo margem
             color: Color(0xff2A236E),
@@ -39,6 +49,7 @@ class LoginScreen extends StatelessWidget {
                     height: 10,
                   ),
                   TextFormField(                            //criando campo
+                    controller: usuarioController,
                     keyboardType: TextInputType.emailAddress,//definindo o tipo email andresspara aparecer o @ no teclado
                     decoration: InputDecoration(
                       labelText: "Usuário ou E-mail",
@@ -60,6 +71,7 @@ class LoginScreen extends StatelessWidget {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: senhaController,
                     keyboardType: TextInputType.text,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -92,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: (){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => TelaCadastro()),
+                          MaterialPageRoute(builder: (context) => LoginScreen()),
                         );
                       },           //definir para onde vai!!!!
                     ),
@@ -141,15 +153,47 @@ class LoginScreen extends StatelessWidget {
                             )
                           ],
                         ),
-                        onPressed: (){
-                          if(_formKey.currentState.validate()){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Home()),
 
-                            );
-                          } else
-                            print("magoou meus sentimentos",);
+
+                        onPressed: () async {
+
+
+                          setState(() {
+                            _isLoading = true;
+                            
+                          });
+                          final users = await ApiService.getUserList();
+                          setState(() {
+                            _isLoading = false;
+                          });
+                          if (users == null) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text("Error"),
+                                    content: Text("Check your internet connection"),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text("Ok"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      )
+                                    ],
+                                  );
+                                });
+                            return;
+                          } else {
+                              final user = users.where((u) => u['usuario'] == usuarioController.text && u['senha'] == senhaController.text).first;
+
+                          {
+                          Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => TelaCadastro()));
+                          }
+
+                        }
+
                         },          //definir para onde vai!!!!
                       ),
                     ),
@@ -171,7 +215,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: (){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => TelaCadastro()),
+                          MaterialPageRoute(builder: (context) => LoginScreen()),
                         );
                       },          //definir para onde vai!!!!
                     ),
@@ -182,4 +226,6 @@ class LoginScreen extends StatelessWidget {
         )
     );
   }
+
+  void setState(Null Function() param0) {}
 }
