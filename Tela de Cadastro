@@ -1,80 +1,21 @@
-import "package:flutter/material.dart";
-import 'package:Bookhub/tela_perfil.dart';
-import 'package:Bookhub/drawertile.dart';
-import 'package:Bookhub/login.dart';
-import 'package:Bookhub/cadastrolivros.dart';
-import 'package:Bookhub/estante.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:core';
-import 'package:Bookhub/api.dart';
-import 'package:Bookhub/cadastro.dart';
+import 'package:flutter/material.dart';
+
+import 'api.dart';
 
 
-void main() async {
-  runApp(MaterialApp(
-    home: LoginScreen(),
-  ));
-}
+final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-class Home extends StatefulWidget {
-  @override
+class TelaCadastro extends StatelessWidget {
 
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-
-  Container myNews( String imageVal, String heading, String subheading){
-    return Container(
-      width: 160.0,
-      child: Card(
-        child: Wrap(
-          children: <Widget>[
-            Image.network(imageVal),
-            ListTile(
-              title: Text(heading
-              ),
-              subtitle: Text(
-                  subheading),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  IconButton iconBottom(IconData simbolo, Widget page) {
-    return IconButton(
-      icon: Icon(simbolo),
-    color: Colors.white,
-    onPressed: () {Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => page),
-    );
-    },
-    );
-  }
-  GestureDetector myTopic (Color color, String titulo) {
-    return new GestureDetector(
-      onTap: () {
-        print("LAIS OBRIGADO POR TUDO TE AMOOOO");
-      },
-      child: Container(
-        color: color,
-        padding: EdgeInsets.all(20.0),
-        child: Text(
-          titulo,
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-    /* Color(0xff2A236E), */
-  }
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController usuarioController = TextEditingController();
+  TextEditingController telefoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    _buildDrawerBack() => Container(            //criando uma função e dando o nome de build Drawer Back
+    Widget _buildDrawerBack() => Container(            //criando uma função e dando o nome de build Drawer Back
       decoration: BoxDecoration(                       //dentro de um container eu defino um boxdecoration
           gradient: LinearGradient(                      //em seguida um gradiente linear
             colors: [
@@ -83,184 +24,235 @@ class _HomeState extends State<Home> {
 
             ],
             begin: Alignment.topLeft,                       //definindo onde começa
-            end: Alignment.bottomRight,                     //definindo onde termina
+            end: Alignment.bottomCenter,                     //definindo onde termina
           )
       ),
     );
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Bookhub"),
-        backgroundColor: Color(0xff2A236E),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {print("elas que lutem");},
-          ),
-        ],
-      ),
-      drawer: Drawer(                                     //criando a classe drawer
-        child: Stack(                                    //como o filho um stack para aparecer por cima da home tab
+      key: _scaffoldKey,
+      body: Stack(
           children: <Widget>[
-            _buildDrawerBack(),                           //chamando a função dentro do widget
-            ListView(                                     // criando listview para exibição de itens
-              padding: EdgeInsets.only(left: 32.0,top:0.0), //definindo espaçamento na borda a esquerda e no top do drawer
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(bottom: 0.0),              //definindo espaçamento entre o próximo conteudo listado
-                  padding: EdgeInsets.fromLTRB(0.0, 8.0, 16.0, 0.0),  //defindo margens dentro do container
-                  height: 250.0,
-                  child: Stack(                                    // criando um stack para que o texto exibido venha por cima do container caso futurammente precise colocar algo no container
-                    children: <Widget>[
-                      DrawerHeader(
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Column(
+            _buildDrawerBack(),
+            Container(
+                padding: EdgeInsets.only(top: 20,left: 20, right: 20,), //defindo margem
+                child: ListView(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Container(
+                      child: Text(
+                        "Seja bem-vindo ao BookHub",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+
+                    ),
+                    SizedBox(
+                      height: 50, //espaçamento entre o texto e imagem
+                    ),
+                    Container(
+                      child: TextFormField(
+                        controller: nomeController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Insira seu nome";
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          labelText: "Nome",
+                          labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400, //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle ( //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: TextFormField(
+                        controller: usuarioController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Insira seu usuario";
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          labelText: "Usuário",
+                          labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400, //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle ( //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: TextFormField(
+                        controller: telefoneController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Insira o telefone";
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          labelText: "Telefone",
+                          labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400, //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle ( //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: TextFormField(
+                        controller: emailController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Insira o e-mail";
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                          ),
+                          labelText: "E-mail",
+                          labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400, //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle ( //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: TextFormField(
+                        controller: senhaController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Insira a senha.";
+                            return null;
+                          }
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                          ),
+                          labelText: "Senha",
+                          labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400, //grossura do texto
+                            fontSize: 15,
+                          ),
+                        ),
+                        style: TextStyle ( //definindo fonte do texto de entreada
+                          fontSize: 15,
+                          color: Colors.white,
+
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 10,left: 55, right: 55,), //defindo margem
+                      child: Container( //container para botão de login
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: Color(0xff2A236E),
+                            borderRadius: BorderRadius.all( //dando formato ao botão
+                              Radius.circular(5),
+                            )
+                        ),
+                        child: FlatButton(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Material(
-                                borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                                child: Image.network(TelaPerfil().perfilimg, width: 120.0, height: 120.0,),
+                              Text(
+                                "Cadastrar",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
 
                               )
                             ],
                           ),
+                          onPressed: () async {
+
+                            _scaffoldKey.currentState.showSnackBar(
+                                new SnackBar(duration: new Duration(seconds: 4), content:
+                                new Row(
+                                  children: <Widget>[
+                                    new CircularProgressIndicator(),
+                                    new Text("  Signing-In...")
+                                  ],
+                                ),
+                                ));
+                            createPost(nomeController.text, usuarioController.text, senhaController.text, emailController.text, telefoneController.text)
+                                .whenComplete(() =>
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => TelaCadastro())
+                                ),
+                            );
+                          }, //definir para onde vai!!!!
                         ),
                       ),
-
-                      Container(
-                        padding: EdgeInsets.only(top: 165,left: 50, right: 30,), //defindo margem
-                        child: Column(
-                          children: <Widget>[
-                          Text("Nome da Pessoa",
-                          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                        Text("@username",
-                          style: TextStyle(fontSize: 15.0, color: Colors.white),
-                        ),
-                        ],
-                      ),
-                      ),
-                    ],
-                  ),
-
-                ),
-                Container(
-                    padding: EdgeInsets.only(top: 0,left: 0, right: 30,), //defindo margem
-                    child: Column(
-                      children: <Widget>[
-                        DrawerTile(Icons.book, "Cadastro de Livros", CadastroLivros()),
-                        DrawerTile(Icons.chat, "Chat", Home()),//defindo os icones ddo drawer
-                        DrawerTile(Icons.settings, "Configuração", Home()),
-                        DrawerTile(Icons.help, "Ajuda", Home()),
-                        DrawerTile(Icons.exit_to_app, "Sair", LoginScreen()),
-                      ],
-                    )
-                ),
-
-              ],
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color(0xff2A236E),
-        child: new Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            iconBottom(Icons.person, TelaPerfil()),
-            iconBottom(Icons.bookmark_border, Estante()),
-            iconBottom(Icons.menu, Home()),
-            iconBottom(Icons.location_on, Home()),
-            iconBottom(Icons.toc, Home()),
-          ],
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-   child: Column(
-     crossAxisAlignment: CrossAxisAlignment.stretch,
-     mainAxisSize: MainAxisSize.min,
-    children: <Widget> [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 20.0),
-            height: 250,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQJWz7PeZmcNQp_svDznslTjfal2Oksb2j4VFwv3lzMw8WBWt3E", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTluY_u--YSm9Yi5k10bdzdoL0nKKcpC8Nxvs7T9rH2mfz8b_-v", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1bKS_TTRyr8UryRNVN4OBQRdYkIQSwoPlDsPy8RysIRFX5w-B", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWXpbiJWEeEGPuiqRuviFxjFJPrDB8UkmXsKHDsg_ATnh1rC4o", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQkTQNBFPFC1e7qcXBgXXT-n4ToahKMj4I20I44AfbBAYgktzA", "Teste1", "Teste2"),
-      ],
                     ),
-                  ),
-
-                              Text("Tópicos", textAlign: TextAlign.center,),
-                              Divider(),
-                              myTopic(Colors.blue, "Qual o segredo da bíblia?"),
-      myTopic(Color(0xff2A236E), "Quando sai a sequência de Game of Thrones?"),
-      myTopic(Colors.blue, "Netflix comprará Percy Jackson?"),
-      myTopic(Color(0xff2A236E), "SPOILER ALERT: Esse personagem vive ou morre?"),
-      FlatButton(
-        color: Color(0xff2A236E),
-        textColor: Colors.white,
-        disabledColor: Colors.grey,
-        disabledTextColor: Colors.black,
-        padding: EdgeInsets.all(8.0),
-        splashColor: Colors.blueAccent,
-        onPressed: () {
-          /*...*/
-        },
-        child: Text("Veja mais"),
-      ),
-      Divider(),
-      Text("Loja", textAlign: TextAlign.center,),
-      ButtonBar(
-          mainAxisSize: MainAxisSize.max,
-          alignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-          OutlineButton(
-          onPressed: () {},
-      child: Text("Novo"),
-      borderSide: BorderSide(color: Colors.blue),
-      shape: StadiumBorder(),
-    ),
-    OutlineButton(
-    onPressed: () {},
-    child: Text("Recomendado"),
-    borderSide: BorderSide(color: Colors.blue),
-    shape: StadiumBorder(),
-    ),
-    OutlineButton(
-    onPressed: () {},
-    child: Text("Menor Preço"),
-    borderSide: BorderSide(color: Colors.blue),
-    shape: StadiumBorder(),
-    ),
-                              ],
-      ),
-      Row(
-        children: <Widget>[
-          Expanded(
-      child: TextField(
-        textAlign: TextAlign.center,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Escreva o nome do livro"
-          ),
-      ),
-    ),
-          IconButton(
-            icon: Icon(Icons.send),
-            color: Colors.blue,
-            onPressed: () {},
-          )
-    ],
-   ),
-      ],
-    ),
+                  ],
+                )
+            ),
+          ]
       ),
     );
+
   }
 }
