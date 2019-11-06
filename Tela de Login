@@ -110,11 +110,11 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 60,
                   ),
                   Container(                        //container para botão de login
                     height: 60,
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                         gradient: LinearGradient(               //definindo um degrade Linear
                           begin: Alignment.topLeft,           //aabaixo temos os parametros do degrade
@@ -127,30 +127,23 @@ class LoginScreen extends StatelessWidget {
 
                         ),
                         borderRadius: BorderRadius.all(                   //dando formato ao botão
-                          Radius.circular(5),
+                          Radius.circular(30),
                         )
                     ),
                     child: SizedBox.expand(
                       child: FlatButton(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween, //função de alinhamento dos itens
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text("Entrar",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                                 fontSize: 20,
                               ),
-                              textAlign: TextAlign.left,
                             ),
-                            Container(             //imagem para o container do botão
-                              color: Colors.transparent,
-                              child: SizedBox(
-                                child: Image.network("https://i.imgur.com/udehoET.jpg"), //definindo imagem e tamanho da mesma
-                                height: 40,
-                                width: 40,
-                              ),
-                            )
+
                           ],
                         ),
 
@@ -160,7 +153,7 @@ class LoginScreen extends StatelessWidget {
 
                           setState(() {
                             _isLoading = true;
-                            
+
                           });
                           final users = await ApiService.getUserList();
                           setState(() {
@@ -184,15 +177,17 @@ class LoginScreen extends StatelessWidget {
                                   );
                                 });
                             return;
-                          } else {
-                              final user = users.where((u) => u['usuario'] == usuarioController.text && u['senha'] == senhaController.text).first;
+                          } else  {
+                            final user = users.where((u) =>
+                            u['usuario'] == usuarioController.text && u['senha'] == senhaController.text).first;
+                            {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => TelaCadastro()));
+                            }
 
-                          {
-                          Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => TelaCadastro()));
+
+
                           }
-
-                        }
 
                         },          //definir para onde vai!!!!
                       ),
@@ -229,3 +224,4 @@ class LoginScreen extends StatelessWidget {
 
   void setState(Null Function() param0) {}
 }
+
