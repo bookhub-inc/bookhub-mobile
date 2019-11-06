@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:Bookhub/cadastro.dart';
 
 Future createPost(String nome, String usuario, String senha, String email, String Telefone) async {
   var jsonText = jsonEncode({'nome': nome, 'usuario': usuario, 'senha': senha, 'email': email, 'telefone': Telefone});
@@ -16,9 +16,28 @@ Future createPost(String nome, String usuario, String senha, String email, Strin
 
 }
 
-Future getPost(String usuario, String senha) async {
-  final response = await http.get('http://ec2-52-67-248-77.sa-east-1.compute.amazonaws.com:8080/usuario');
+class Urls {
+  static const BASE_API_URL = "http://ec2-52-67-248-77.sa-east-1.compute.amazonaws.com:8080/usuario";
+}
 
+class ApiService {
+
+  static Future<dynamic> _get(String url) async {
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        return null;
+      }
+    } catch (ex) {
+      return null;
+    }
   }
 
+  static Future<List<dynamic>> getUserList() async {
+    return await _get('${Urls.BASE_API_URL}');
+  }
+
+}
 
