@@ -1,11 +1,11 @@
-import 'package:bookhubunip/Login.dart';
-import 'package:bookhubunip/api.dart';
+import 'package:Bookhub/cadastro.dart';
+import 'package:Bookhub/api.dart';
 import 'package:flutter/material.dart';
-
+import 'package:dio/dio.dart';
 import 'main.dart';
-
-
-final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 
 
 class LoginScreen extends StatelessWidget {
@@ -17,14 +17,36 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    void _showDialog() {
+      // flutter defined function
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Campo em branco."),
+            content: new Text("Por favor, preencha todos os campos corretamente."),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
     bool _isLoading = false;
     return Scaffold(                    //função para material basico de design
-        key: _scaffoldKey,
         body: Container(
             padding: EdgeInsets.only(top: 30,left: 30, right: 30,), //defindo margem
             color: Color(0xff2A236E),
-            child: Form(
+            child: _isLoading
+                ? CircularProgressIndicator()
+                : Form(
               key: _formKey,
               child: ListView(
                 children: <Widget>[
@@ -52,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                     controller: usuarioController,
                     keyboardType: TextInputType.emailAddress,//definindo o tipo email andresspara aparecer o @ no teclado
                     decoration: InputDecoration(
-                      labelText: "Usuário ou E-mail",
+                      labelText: "Usuário",
                       labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
                         color: Colors.white,
                         fontWeight: FontWeight.w400,            //grossura do texto
@@ -64,7 +86,10 @@ class LoginScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                     validator: (text){
-                      if (text.isEmpty) return "Preencha o campo!";
+                      if (text.isEmpty) {
+                        return "Preencha o campo!";
+                        return null;
+                      }
                     },
                   ),
                   SizedBox(
@@ -87,7 +112,9 @@ class LoginScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                     validator: (text){
-                      if (text.isEmpty || text.length < 6 ) return "Senha Inválida";
+                      if (text.isEmpty || text.length < 6 ) {
+                        return "Senha Inválida";
+                      }
                     },
                   ),
                   Container(                       //criando container para criação do botão de reset
@@ -102,8 +129,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: (){
-                        Navigator.push(
-                          context,
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) => LoginScreen()),
                         );
                       },           //definir para onde vai!!!!
@@ -149,46 +175,20 @@ class LoginScreen extends StatelessWidget {
 
 
                         onPressed: () async {
+                          if(_formKey.currentState.validate()){
+    setState(() => _isLoading = true);
+    final users = await ApiService.getPostList();
+    setState(() => _isLoading = false);
+    final user = users.where((u) =>
+    u['usuario'] == usuarioController.text && u['senha'] == senhaController.text).first;
 
-
-                          setState(() {
-                            _isLoading = true;
-
-                          });
-                          final users = await ApiService.getUserList();
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          if (users == null) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text("Error"),
-                                    content: Text("Check your internet connection"),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        child: Text("Ok"),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                      )
-                                    ],
-                                  );
-                                });
-                            return;
-                          } else  {
-                            final user = users.where((u) =>
-                            u['usuario'] == usuarioController.text && u['senha'] == senhaController.text).first;
-                            {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => TelaCadastro()));
-                            }
-
-
-
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => Home()));
+    } else {
+CircleProgressIndicator();
+                            Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text("Verifique seus dados se estão corretos!")));
                           }
-
                         },          //definir para onde vai!!!!
                       ),
                     ),
@@ -210,7 +210,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: (){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginScreen()),
+                          MaterialPageRoute(builder: (context) => TelaCadastro()),
                         );
                       },          //definir para onde vai!!!!
                     ),
@@ -224,4 +224,3 @@ class LoginScreen extends StatelessWidget {
 
   void setState(Null Function() param0) {}
 }
-
