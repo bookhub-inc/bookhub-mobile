@@ -185,7 +185,7 @@ class LoginScreen extends StatelessWidget {
     Navigator.push(context,
     MaterialPageRoute(builder: (context) => Home()));
     } else {
-CircleProgressIndicator();
+CircularProgressIndicator();
                             Scaffold.of(context).showSnackBar(
                                 SnackBar(content: Text("Verifique seus dados se estão corretos!")));
                           }
