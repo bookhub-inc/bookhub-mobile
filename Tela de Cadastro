@@ -325,7 +325,7 @@ class TelaCadastro extends StatelessWidget {
                                 ],
                               ),
                               onPressed: () async {
-                                if (nomeController.text.isEmpty || nomeController.text.isEmpty ||
+                                if (nomeController.text.isEmpty || sobrenomeController.text.isEmpty || nomeController.text.isEmpty ||
                                     usuarioController.text.isEmpty
                                     || senhaController.text.isEmpty || emailController.text.isEmpty ||
                                     telefoneController.text.isEmpty) {
@@ -334,7 +334,7 @@ class TelaCadastro extends StatelessWidget {
                                 else {
                                   if (_formChave.currentState.validate()) {
                                     createPost(
-                                        nomeController.text, usuarioController.text, senhaController.text,
+                                        nomeController.text, sobrenomeController.text, usuarioController.text, senhaController.text,
                                         emailController.text, telefoneController.text)
                                         .whenComplete(() =>
                                         _cadastroUser("Usuário cadastrado com sucesso", "Obrigado por se cadastrar no Bookhub!")
