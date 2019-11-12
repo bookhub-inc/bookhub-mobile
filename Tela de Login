@@ -180,7 +180,7 @@ class LoginScreen extends StatelessWidget {
     final users = await ApiService.getPostList();
     setState(() => _isLoading = false);
     final user = users.where((u) =>
-    u['usuario'] == usuarioController.text && u['senha'] == senhaController.text).first;
+    u['login'] == usuarioController.text && u['senha'] == senhaController.text).first;
 
     Navigator.push(context,
     MaterialPageRoute(builder: (context) => Home()));
