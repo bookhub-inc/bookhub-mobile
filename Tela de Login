@@ -1,14 +1,18 @@
-import 'package:Bookhub/cadastro.dart';
-import 'package:Bookhub/api.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'TelaCadastro.dart';
+import 'api.dart';
 import 'main.dart';
-import 'dart:io';
-import 'dart:async';
-import 'dart:convert';
 
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
 
   TextEditingController usuarioController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
@@ -39,6 +43,23 @@ class LoginScreen extends StatelessWidget {
         },
       );
     }
+
+    Future<bool>saveNamePreference(String name) async{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("name", name);
+      return prefs.commit();
+    }
+
+
+    void saveName(){
+
+      String name = usuarioController.text;
+      saveNamePreference(name).then((bool committed) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      });
+
+    }
+
     bool _isLoading = false;
     return Scaffold(                    //função para material basico de design
         body: Container(
@@ -175,21 +196,25 @@ class LoginScreen extends StatelessWidget {
 
 
                         onPressed: () async {
+                          //saveName();
                           if(_formKey.currentState.validate()){
-    setState(() => _isLoading = true);
-    final users = await ApiService.getPostList();
-    setState(() => _isLoading = false);
-    final user = users.where((u) =>
-    u['login'] == usuarioController.text && u['senha'] == senhaController.text).first;
+                            setState(() => _isLoading = true);
+                            final users = await ApiService.getUserList();
+                            setState(() => _isLoading = false);
+                            final user = users.where((u) =>
+                            u['login'] == usuarioController.text && u['senha'] == senhaController.text).first;
 
-    Navigator.push(context,
-    MaterialPageRoute(builder: (context) => Home()));
-    } else {
-CircularProgressIndicator();
+                            saveName();
+
+                          } else {
+                            CircularProgressIndicator();
                             Scaffold.of(context).showSnackBar(
                                 SnackBar(content: Text("Verifique seus dados se estão corretos!")));
                           }
-                        },          //definir para onde vai!!!!
+
+
+
+                          },          //definir para onde vai!!!!
                       ),
                     ),
                   ),
@@ -222,5 +247,4 @@ CircularProgressIndicator();
     );
   }
 
-  void setState(Null Function() param0) {}
 }
