@@ -1,7 +1,10 @@
 import "package:flutter/material.dart";
-import 'package:Bookhub/tela_perfil.dart';
-import 'package:Bookhub/drawertile.dart';
-import 'package:Bookhub/login.dart';
+import 'package:projetodetestes/TelaCadastro.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'CadastroLivros.dart';
+import 'DrawerTile.dart';
+import 'LoginScreen.dart';
+import 'TelaPerfil.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -17,6 +20,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  String _name = "";
+  @override
+
+  Future<String> getNamePreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String name = prefs.getString("name");
+    return name;
+  }
+
+  void initState(){
+    getNamePreference().then(updateName);
+    super.initState();
+  }
+
   Container myNews( String imageVal, String heading, String subheading){
     return Container(
       width: 160.0,
@@ -39,12 +57,12 @@ class _HomeState extends State<Home> {
   IconButton iconBottom(IconData simbolo, Widget page) {
     return IconButton(
       icon: Icon(simbolo),
-    color: Colors.white,
-    onPressed: () {Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => page),
-    );
-    },
+      color: Colors.white,
+      onPressed: () {Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => page),
+      );
+      },
     );
   }
   GestureDetector myTopic (Color color, String titulo) {
@@ -122,14 +140,14 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.only(top: 165,left: 50, right: 30,), //defindo margem
                         child: Column(
                           children: <Widget>[
-                          Text("Nome da Pessoa",
-                          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
+                            Text(_name,
+                              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                            Text("@username",
+                              style: TextStyle(fontSize: 15.0, color: Colors.white),
+                            ),
+                          ],
                         ),
-                        Text("@username",
-                          style: TextStyle(fontSize: 15.0, color: Colors.white),
-                        ),
-                        ],
-                      ),
                       ),
                     ],
                   ),
@@ -139,7 +157,7 @@ class _HomeState extends State<Home> {
                     padding: EdgeInsets.only(top: 0,left: 0, right: 30,), //defindo margem
                     child: Column(
                       children: <Widget>[
-                        DrawerTile(Icons.book, "Cadastro de Livros", Home()),
+                        DrawerTile(Icons.book, "Cadastro de Livros", CadastroLivros()),
                         DrawerTile(Icons.chat, "Chat", Home()),//defindo os icones ddo drawer
                         DrawerTile(Icons.settings, "Configuração", Home()),
                         DrawerTile(Icons.help, "Ajuda", Home()),
@@ -169,90 +187,101 @@ class _HomeState extends State<Home> {
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-   child: Column(
-     crossAxisAlignment: CrossAxisAlignment.stretch,
-     mainAxisSize: MainAxisSize.min,
-    children: <Widget> [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 20.0),
-            height: 250,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget> [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 20.0),
+              height: 250,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQJWz7PeZmcNQp_svDznslTjfal2Oksb2j4VFwv3lzMw8WBWt3E", "Teste1", "Teste2"),
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTluY_u--YSm9Yi5k10bdzdoL0nKKcpC8Nxvs7T9rH2mfz8b_-v", "Teste1", "Teste2"),
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1bKS_TTRyr8UryRNVN4OBQRdYkIQSwoPlDsPy8RysIRFX5w-B", "Teste1", "Teste2"),
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWXpbiJWEeEGPuiqRuviFxjFJPrDB8UkmXsKHDsg_ATnh1rC4o", "Teste1", "Teste2"),
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQkTQNBFPFC1e7qcXBgXXT-n4ToahKMj4I20I44AfbBAYgktzA", "Teste1", "Teste2"),
+                ],
+              ),
+            ),
+
+            Text("Tópicos", textAlign: TextAlign.center,),
+            Divider(),
+            myTopic(Colors.blue, "Qual o segredo da bíblia?"),
+            myTopic(Color(0xff2A236E), "Quando sai a sequência de Game of Thrones?"),
+            myTopic(Colors.blue, "Netflix comprará Percy Jackson?"),
+            myTopic(Color(0xff2A236E), "SPOILER ALERT: Esse personagem vive ou morre?"),
+            FlatButton(
+              color: Color(0xff2A236E),
+              textColor: Colors.white,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.black,
+              padding: EdgeInsets.all(8.0),
+              splashColor: Colors.blueAccent,
+              onPressed: () {
+                /*...*/
+              },
+              child: Text("Veja mais"),
+            ),
+            Divider(),
+            Text("Loja", textAlign: TextAlign.center,),
+            ButtonBar(
+              mainAxisSize: MainAxisSize.max,
+              alignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQJWz7PeZmcNQp_svDznslTjfal2Oksb2j4VFwv3lzMw8WBWt3E", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTluY_u--YSm9Yi5k10bdzdoL0nKKcpC8Nxvs7T9rH2mfz8b_-v", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1bKS_TTRyr8UryRNVN4OBQRdYkIQSwoPlDsPy8RysIRFX5w-B", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWXpbiJWEeEGPuiqRuviFxjFJPrDB8UkmXsKHDsg_ATnh1rC4o", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQkTQNBFPFC1e7qcXBgXXT-n4ToahKMj4I20I44AfbBAYgktzA", "Teste1", "Teste2"),
-      ],
+                OutlineButton(
+                  onPressed: () {},
+                  child: Text("Novo"),
+                  borderSide: BorderSide(color: Colors.blue),
+                  shape: StadiumBorder(),
+                ),
+                OutlineButton(
+                  onPressed: () {},
+                  child: Text("Recomendado"),
+                  borderSide: BorderSide(color: Colors.blue),
+                  shape: StadiumBorder(),
+                ),
+                OutlineButton(
+                  onPressed: () {},
+                  child: Text("Menor Preço"),
+                  borderSide: BorderSide(color: Colors.blue),
+                  shape: StadiumBorder(),
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Escreva o nome do livro"
                     ),
                   ),
-
-                              Text("Tópicos", textAlign: TextAlign.center,),
-                              Divider(),
-                              myTopic(Colors.blue, "Qual o segredo da bíblia?"),
-      myTopic(Color(0xff2A236E), "Quando sai a sequência de Game of Thrones?"),
-      myTopic(Colors.blue, "Netflix comprará Percy Jackson?"),
-      myTopic(Color(0xff2A236E), "SPOILER ALERT: Esse personagem vive ou morre?"),
-      FlatButton(
-        color: Color(0xff2A236E),
-        textColor: Colors.white,
-        disabledColor: Colors.grey,
-        disabledTextColor: Colors.black,
-        padding: EdgeInsets.all(8.0),
-        splashColor: Colors.blueAccent,
-        onPressed: () {
-          /*...*/
-        },
-        child: Text("Veja mais"),
-      ),
-      Divider(),
-      Text("Loja", textAlign: TextAlign.center,),
-      ButtonBar(
-          mainAxisSize: MainAxisSize.max,
-          alignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-          OutlineButton(
-          onPressed: () {},
-      child: Text("Novo"),
-      borderSide: BorderSide(color: Colors.blue),
-      shape: StadiumBorder(),
-    ),
-    OutlineButton(
-    onPressed: () {},
-    child: Text("Recomendado"),
-    borderSide: BorderSide(color: Colors.blue),
-    shape: StadiumBorder(),
-    ),
-    OutlineButton(
-    onPressed: () {},
-    child: Text("Menor Preço"),
-    borderSide: BorderSide(color: Colors.blue),
-    shape: StadiumBorder(),
-    ),
-                              ],
-      ),
-      Row(
-        children: <Widget>[
-          Expanded(
-      child: TextField(
-        textAlign: TextAlign.center,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Escreva o nome do livro"
-          ),
-      ),
-    ),
-          IconButton(
-            icon: Icon(Icons.send),
-            color: Colors.blue,
-            onPressed: () {},
-          )
-    ],
-   ),
-      ],
-    ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  color: Colors.blue,
+                  onPressed: () {},
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
+
+
+
+  void updateName( String name ){
+
+    setState((){
+      this._name = name;
+    });
+  }
+
 }
+
