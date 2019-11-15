@@ -1,14 +1,14 @@
+import 'package:Bookhub/cadastro.dart';
+import 'package:Bookhub/api.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'TelaCadastro.dart';
-import 'api.dart';
+import 'package:Bookhub/models/usuario.dart';
 import 'main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
+@override
+_LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -21,15 +21,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void _showDialog() {
+    void _showDialog(String title, String body) {
       // flutter defined function
       showDialog(
         context: context,
         builder: (BuildContext context) {
           // return object of type Dialog
           return AlertDialog(
-            title: new Text("Campo em branco."),
-            content: new Text("Por favor, preencha todos os campos corretamente."),
+            title: new Text("${title}"),
+            content: new Text("${body}"),
             actions: <Widget>[
               // usually buttons at the bottom of the dialog
               new FlatButton(
@@ -43,27 +43,72 @@ class _LoginScreenState extends State<LoginScreen> {
         },
       );
     }
-
-    Future<bool>saveNamePreference(String name) async{
+      Future<bool> saveNamePreference(Usuario user) async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("nome", user.nome);
+        return prefs.commit();
+      }
+      Future<bool> saveUserPreference(Usuario user) async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("login", user.login);
+        return prefs.commit();
+      }
+      Future<bool> saveIdPreference(Usuario user) async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setInt("id", user.id);
+        return prefs.commit();
+      }
+    Future<bool> saveSobrenomePreference(Usuario user) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("name", name);
+      prefs.setString("sobrenome", user.sobrenome);
+      return prefs.commit();
+    }
+    Future<bool> saveTelefonePreference(Usuario user) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("sobrenome", user.sobrenome);
+      return prefs.commit();
+    }
+    Future<bool> saveEmailPreference(Usuario user) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("email", user.email);
+      return prefs.commit();
+    }
+    Future<bool> saveIdAvatarPreference(Usuario user) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt("idAvatar", user.idAvatar);
       return prefs.commit();
     }
 
 
-    void saveName(){
-
-      String name = usuarioController.text;
-      saveNamePreference(name).then((bool committed) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-      });
-
-    }
+      void logadoUser(Usuario nomeUser) {
+        saveNamePreference(nomeUser).then((bool committed) {
+          saveIdPreference(nomeUser).then((bool committed) {
+            saveUserPreference(nomeUser).then((bool committed) {
+              saveSobrenomePreference(nomeUser).then((bool committed) {
+                saveEmailPreference(nomeUser).then((bool committed) {
+                  saveIdAvatarPreference(nomeUser).then((bool committed) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()));
+                  }
+                  );
+                  }
+                  );
+              }
+              );
+            }
+            );
+          }
+          );
+        }
+        );
+      }
 
     bool _isLoading = false;
-    return Scaffold(                    //função para material basico de design
+    return Scaffold( //função para material basico de design
         body: Container(
-            padding: EdgeInsets.only(top: 30,left: 30, right: 30,), //defindo margem
+            padding: EdgeInsets.only(top: 30, left: 30, right: 30,),
+            //defindo margem
             color: Color(0xff2A236E),
             child: _isLoading
                 ? CircularProgressIndicator()
@@ -81,32 +126,34 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 40,              //espaçamento entre o texto e imagem
+                    height: 40, //espaçamento entre o texto e imagem
                   ),
-                  SizedBox(            //criando side box
-                    width: 150,             //definindo tamnho da imagem dentro do container
+                  SizedBox( //criando side box
+                    width: 150, //definindo tamnho da imagem dentro do container
                     height: 150,
-                    child: Image.network("https://i.imgur.com/V2CfTHR.png"),          //criando filho com a imagem em si
+                    child: Image.network(
+                        "https://i.imgur.com/V2CfTHR.png"), //criando filho com a imagem em si
                   ),
-                  SizedBox(   //criando outra sized box para dar um espaço entre a imageme o campo de email e senha
+                  SizedBox( //criando outra sized box para dar um espaço entre a imageme o campo de email e senha
                     height: 10,
                   ),
-                  TextFormField(                            //criando campo
+                  TextFormField( //criando campo
                     controller: usuarioController,
-                    keyboardType: TextInputType.emailAddress,//definindo o tipo email andresspara aparecer o @ no teclado
+                    keyboardType: TextInputType.emailAddress,
+                    //definindo o tipo email andresspara aparecer o @ no teclado
                     decoration: InputDecoration(
                       labelText: "Usuário",
-                      labelStyle: TextStyle(                    //definindo fonte da label "caixinha de texto"
+                      labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
                         color: Colors.white,
-                        fontWeight: FontWeight.w400,            //grossura do texto
+                        fontWeight: FontWeight.w400, //grossura do texto
                         fontSize: 15,
                       ),
                     ),
-                    style: TextStyle (                //definindo fonte do texto de entreada
+                    style: TextStyle( //definindo fonte do texto de entreada
                       fontSize: 15,
                       color: Colors.white,
                     ),
-                    validator: (text){
+                    validator: (text) {
                       if (text.isEmpty) {
                         return "Preencha o campo!";
                         return null;
@@ -124,21 +171,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelText: "Senha",
                         labelStyle: TextStyle(
                           color: Colors.white,
-                          fontWeight: FontWeight.w400,            //grossura do texto
+                          fontWeight: FontWeight.w400, //grossura do texto
                           fontSize: 15,
                         )
                     ),
-                    style: TextStyle (                //definindo fonte do texto de entreada
+                    style: TextStyle( //definindo fonte do texto de entreada
                       fontSize: 20,
                       color: Colors.white,
                     ),
-                    validator: (text){
-                      if (text.isEmpty || text.length < 6 ) {
+                    validator: (text) {
+                      if (text.isEmpty || text.length < 6) {
                         return "Senha Inválida";
                       }
                     },
                   ),
-                  Container(                       //criando container para criação do botão de reset
+                  Container( //criando container para criação do botão de reset
                     height: 40,
                     alignment: Alignment.centerRight,
                     child: FlatButton(
@@ -149,79 +196,78 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: (){
+                      onPressed: () {
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => LoginScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()),
                         );
-                      },           //definir para onde vai!!!!
+                      }, //definir para onde vai!!!!
                     ),
                   ),
                   SizedBox(
                     height: 60,
                   ),
-                  Container(                        //container para botão de login
+                  Container( //container para botão de login
                     height: 60,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(               //definindo um degrade Linear
-                          begin: Alignment.topLeft,           //aabaixo temos os parametros do degrade
+                        gradient: LinearGradient( //definindo um degrade Linear
+                          begin: Alignment.topLeft,
+                          //aabaixo temos os parametros do degrade
                           end: Alignment.bottomRight,
-                          stops: [0.1,1],
+                          stops: [0.1, 1],
                           colors: [
                             Color(0xff7A74D4),
                             Color(0xffedf1ff),
                           ],
 
                         ),
-                        borderRadius: BorderRadius.all(                   //dando formato ao botão
+                        borderRadius: BorderRadius.all( //dando formato ao botão
                           Radius.circular(30),
                         )
                     ),
                     child: SizedBox.expand(
                       child: FlatButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("Entrar",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text("Entrar",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
                               ),
-                            ),
 
-                          ],
-                        ),
-
-
-                        onPressed: () async {
-                          //saveName();
-                          if(_formKey.currentState.validate()){
-                            setState(() => _isLoading = true);
-                            final users = await ApiService.getUserList();
-                            setState(() => _isLoading = false);
-                            final user = users.where((u) =>
-                            u['login'] == usuarioController.text && u['senha'] == senhaController.text).first;
-
-                            saveName();
-
-                          } else {
-                            CircularProgressIndicator();
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text("Verifique seus dados se estão corretos!")));
-                          }
+                            ],
+                          ),
 
 
+                          onPressed: () async {
 
-                          },          //definir para onde vai!!!!
-                      ),
+                            if (_formKey.currentState.validate()) {
+                              setState(() => _isLoading = true);
+                              final users = await ApiService.getUsersList();
+                              setState(() => _isLoading = false);
+                              final user = users.where((u) =>
+                              u['login'] == usuarioController.text &&
+                                  u['senha'] == senhaController.text).first;
+
+                              Usuario userLogado = Usuario.fromJson(user);
+                              logadoUser(userLogado);
+
+                            } else {
+                              Scaffold.of(context).showSnackBar(
+                                  SnackBar(content: Text("Wrong email or")));
+                            }; //definir para onde vai!!!!
+                          }),
                     ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Container(                       //criando container para criação do botão de reset
+                  Container( //criando container para criação do botão de reset
                     height: 40,
                     alignment: Alignment.center,
                     child: FlatButton(
@@ -232,12 +278,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: (){
+                      onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => TelaCadastro()),
+                          MaterialPageRoute(
+                              builder: (context) => TelaCadastro()),
                         );
-                      },          //definir para onde vai!!!!
+                      }, //definir para onde vai!!!!
                     ),
                   ),
                 ],
@@ -246,5 +293,6 @@ class _LoginScreenState extends State<LoginScreen> {
         )
     );
   }
+
 
 }
