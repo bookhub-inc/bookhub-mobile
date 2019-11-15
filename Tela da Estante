@@ -1,11 +1,12 @@
+import 'package:bookhub/topicos.dart';
 import 'package:flutter/material.dart';
-import 'package:Bookhub/DrawerTile.dart';
-import 'package:Bookhub/main.dart';
-import 'package:Bookhub/tela_perfil.dart';
-import 'package:Bookhub/login.dart';
-import 'package:Bookhub/topicos.dart';
-import 'package:Bookhub/cadastrolivros.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'DrawerTile.dart';
+import 'LoginScreen.dart';
+import 'TelaPerfil.dart';
+import 'TeladeCadastrodeLivros.dart';
+import 'main.dart';
+import 'models/data_search.dart';
 
 class Estante extends StatefulWidget {
   @override
@@ -108,37 +109,6 @@ class _EstanteState extends State<Estante> {
   }
 
 
-  Future <String> createDialog(BuildContext context) {
-    TextEditingController customController = new TextEditingController();
-
-    return showDialog(context: context, builder: (context) {
-      return AlertDialog(
-        title: Text(
-            "Adicionar livro a estante"
-        ),
-        content: TextFormField(
-          controller: customController,
-          decoration: InputDecoration(
-            labelText: "Nome do Livro",
-            labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
-              color: Colors.black,
-              fontWeight: FontWeight.w400, //grossura do texto
-              fontSize: 15,
-            ),
-          ),
-        ),
-        actions: <Widget>[
-          MaterialButton(
-            elevation: 5.0,
-            child: Text("Adicionar Livro"),
-            onPressed: () {
-              Navigator.of(context).pop(customController.text.toString());
-            },
-          ),
-        ],
-      );
-    });
-  }
 
 
   String image1 = "https://a-static.mlcdn.com.br/1500x1500/livro-textos-crueis-demais-para-serem-lidos-rapidamente/magazineluiza/223242600/9e42c83227ba53a8da94ad9d59a1e3cc.jpg";
@@ -158,336 +128,319 @@ class _EstanteState extends State<Estante> {
   String image15 = "https://images-na.ssl-images-amazon.com/images/I/41%2BH%2BynXnRL._SX380_BO1,204,203,200_.jpg";
 
 
-    Widget build(BuildContext context) {
-      @override
-      IconButton iconBottom(IconData simbolo, Widget page) {
-        return IconButton(
-          icon: Icon(simbolo),
-          color: Colors.white,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => page),
-            );
-          },
-        );
-      }
-      _buildDrawerBack() =>
-          Container( //criando uma função e dando o nome de build Drawer Back
-            decoration: BoxDecoration( //dentro de um container eu defino um boxdecoration
-                gradient: LinearGradient( //em seguida um gradiente linear
-                  colors: [
-                    Color(0xff2A236E),
-                    Color(0xff836FFF), //definindo cores em hexadecimal
-
-                  ],
-                  begin: Alignment.topLeft, //definindo onde começa
-                  end: Alignment.bottomRight, //definindo onde termina
-                )
-            ),
+  Widget build(BuildContext context) {
+    @override
+    IconButton iconBottom(IconData simbolo, Widget page) {
+      return IconButton(
+        icon: Icon(simbolo),
+        color: Colors.white,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => page),
           );
-      _buildBodyBack() =>
-          Container( //função que cria fundo com degrade que irá retornar um container
-            decoration: BoxDecoration( //box decoration
-                gradient: LinearGradient( //gradiente para um fundo degrade
-                  colors: [
-                    Color(0xff2A236E), //definindo cores em hexadecimal
-                    Color(0xff7A74D4),
+        },
+      );
+    }
+    _buildDrawerBack() =>
+        Container( //criando uma função e dando o nome de build Drawer Back
+          decoration: BoxDecoration( //dentro de um container eu defino um boxdecoration
+              gradient: LinearGradient( //em seguida um gradiente linear
+                colors: [
+                  Color(0xff2A236E),
+                  Color(0xff836FFF), //definindo cores em hexadecimal
 
-                  ],
-                  begin: Alignment.topLeft, //definindo onde o gradiente começa
-                  end: Alignment.bottomRight, //definindo onde ele termina
-                )
-            ),
-          );
-      void _showDialog() {
-        // flutter defined function
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            // return object of type Dialog
-            return AlertDialog(
-              title: new Text("Livro registrado!"),
-              content: new Text("Obrigado por sua colaboração!"),
-              actions: <Widget>[
-                // usually buttons at the bottom of the dialog
-                new FlatButton(
-                  child: new Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
+                ],
+                begin: Alignment.topLeft, //definindo onde começa
+                end: Alignment.bottomRight, //definindo onde termina
+              )
+          ),
         );
-      }
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("Bookhub"),
-          backgroundColor: Color(0xff2A236E),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                initState();
-              },
-            ),
-          ],
-        ),
-        drawer: Drawer( //criando a classe drawer
-          child: Stack( //como o filho um stack para aparecer por cima da home tab
-            children: <Widget>[
-              _buildDrawerBack(), //chamando a função dentro do widget
-              ListView( // criando listview para exibição de itens
-                padding: EdgeInsets.only(left: 32.0, top: 0.0),
-                //definindo espaçamento na borda a esquerda e no top do drawer
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: 0.0),
-                    //definindo espaçamento entre o próximo conteudo listado
-                    padding: EdgeInsets.fromLTRB(0.0, 8.0, 16.0, 0.0),
-                    //defindo margens dentro do container
-                    height: 250.0,
-                    child: Stack( // criando um stack para que o texto exibido venha por cima do container caso futurammente precise colocar algo no container
-                      children: <Widget>[
-                        DrawerHeader(
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  width: 120,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    boxShadow: [BoxShadow(
-                                      color: Color(0xff2A236E),
-                                      blurRadius: 20,
-                                      offset: Offset(0, 0),
-                                    ),
-                                    ],
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(avatar(_idAvatar)),
-                                    ),
-                                  ),
+    _buildBodyBack() =>
+        Container( //função que cria fundo com degrade que irá retornar um container
+          decoration: BoxDecoration( //box decoration
+              gradient: LinearGradient( //gradiente para um fundo degrade
+                colors: [
+                  Color(0xff2A236E), //definindo cores em hexadecimal
+                  Color(0xff7A74D4),
 
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        Container(
-                          padding: EdgeInsets.only(
-                            top: 165, left: 50, right: 30,), //defindo margem
+                ],
+                begin: Alignment.topLeft, //definindo onde o gradiente começa
+                end: Alignment.bottomRight, //definindo onde ele termina
+              )
+          ),
+        );
+    void _showDialog() {
+      // flutter defined function
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Livro registrado!"),
+            content: new Text("Obrigado por sua colaboração!"),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Bookhub"),
+        backgroundColor: Color(0xff2A236E),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: DataSearch());
+            },
+          ),
+        ],
+      ),
+      drawer: Drawer( //criando a classe drawer
+        child: Stack( //como o filho um stack para aparecer por cima da home tab
+          children: <Widget>[
+            _buildDrawerBack(), //chamando a função dentro do widget
+            ListView( // criando listview para exibição de itens
+              padding: EdgeInsets.only(left: 32.0, top: 0.0),
+              //definindo espaçamento na borda a esquerda e no top do drawer
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: 0.0),
+                  //definindo espaçamento entre o próximo conteudo listado
+                  padding: EdgeInsets.fromLTRB(0.0, 8.0, 16.0, 0.0),
+                  //defindo margens dentro do container
+                  height: 250.0,
+                  child: Stack( // criando um stack para que o texto exibido venha por cima do container caso futurammente precise colocar algo no container
+                    children: <Widget>[
+                      DrawerHeader(
+                        child: Container(
+                          alignment: Alignment.center,
                           child: Column(
                             children: <Widget>[
-                              Text("${_nome} ${_sobrenome}",
-                                style: TextStyle(fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                              Text("@${_user}",
-                                style: TextStyle(
-                                    fontSize: 15.0, color: Colors.white),
-                              ),
+                              Container(
+                                width: 120,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  boxShadow: [BoxShadow(
+                                    color: Color(0xff2A236E),
+                                    blurRadius: 20,
+                                    offset: Offset(0, 0),
+                                  ),
+                                  ],
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(avatar(_idAvatar)),
+                                  ),
+                                ),
+
+                              )
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+
+                      Container(
+                        padding: EdgeInsets.only(
+                          top: 165, left: 50, right: 30,), //defindo margem
+                        child: Column(
+                          children: <Widget>[
+                            Text("${_nome} ${_sobrenome}",
+                              style: TextStyle(fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Text("@${_user}",
+                              style: TextStyle(
+                                  fontSize: 15.0, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                      padding: EdgeInsets.only(top: 0, left: 0, right: 30,),
-                      //defindo margem
-                      child: Column(
-                        children: <Widget>[
-                          DrawerTile(Icons.book, "Cadastro de Livros",
-                              CadastroLivros()),
-                          DrawerTile(Icons.chat, "Chat", LoginScreen()),
-                          //defindo os icones ddo drawer
-                          DrawerTile(
-                              Icons.settings, "Configuração", LoginScreen()),
-                          DrawerTile(Icons.help, "Ajuda", LoginScreen()),
-                          DrawerExit(Icons.exit_to_app, "Sair", 3),
-                        ],
-                      )
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: Color(0xff2A236E),
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              iconBottom(Icons.person, TelaPerfil()),
-              iconBottom(Icons.bookmark_border, Estante()),
-              iconBottom(Icons.menu, Home()),
-              iconBottom(Icons.location_on, LoginScreen()),
-              iconBottom(Icons.toc, Topicos()),
-            ],
-          ),
-        ),
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: <Widget>[
-            _buildBodyBack(),
-            SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(top: 30, left: 20, right: 20),
-                    height: 170,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
+                ),
+                Container(
+                    padding: EdgeInsets.only(top: 0, left: 0, right: 30,),
+                    //defindo margem
+                    child: Column(
                       children: <Widget>[
-                        FlatButton(
-                          child: Image.network(image1),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        // Image.network(image1),
-                        FlatButton(
-                          child: Image.network(image2),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        FlatButton(
-                          child: Image.network(image3),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        FlatButton(
-                          child: Image.network(image4),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        FlatButton(
-                          child: Image.network(image5),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
+                        DrawerTile(Icons.book, "Cadastro de Livros",
+                            CadastroLivros()),
+                        DrawerTile(Icons.chat, "Chat", LoginScreen()),
+                        //defindo os icones ddo drawer
+                        DrawerTile(
+                            Icons.settings, "Configuração", LoginScreen()),
+                        DrawerTile(Icons.help, "Ajuda", LoginScreen()),
+                        DrawerExit(Icons.exit_to_app, "Sair", 3),
                       ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                    height: 170,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: <Widget>[
-                        FlatButton(
-
-                          child: Image.network(image6),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        // Image.network(image1),
-                        FlatButton(
-                          child: Image.network(image7),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        FlatButton(
-                          child: Image.network(image8),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        FlatButton(
-                          child: Image.network(image9),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        FlatButton(
-                          child: Image.network(image10),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Container(
-                    margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                    height: 170,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: <Widget>[
-                        FlatButton(
-                          child: Image.network(image11),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        // Image.network(image1),
-                        FlatButton(
-                          child: Image.network(image12),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        FlatButton(
-                          child: Image.network(image13),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        FlatButton(
-                          child: Image.network(image14),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                        FlatButton(
-                          child: Image.network(image15),
-                          onPressed: () {
-                            bookcaseDialog(context).then((onValue) {});
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: IconButton(
-                icon: Icon(Icons.add_circle),
-                color: Colors.white,
-                iconSize: 60,
-
-                onPressed: () {
-                  createDialog(context).then((onValue) {
-                    SnackBar mySnackbar = SnackBar(
-                        content: Text("Livro adicionado $onValue"));
-                    Scaffold.of(context).showSnackBar(mySnackbar);
-                  });
-                },
-              ),
-            ),
-
+                    )
+                ),
+              ],
+            )
           ],
         ),
-      );
-    }
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Color(0xff2A236E),
+        child: new Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            iconBottom(Icons.person, TelaPerfil()),
+            iconBottom(Icons.bookmark_border, Estante()),
+            iconBottom(Icons.menu, Home()),
+            iconBottom(Icons.location_on, LoginScreen()),
+            iconBottom(Icons.toc, Topicos()),
+          ],
+        ),
+      ),
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: <Widget>[
+          _buildBodyBack(),
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 30, left: 20, right: 20),
+                  height: 170,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Image.network(image1),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      // Image.network(image1),
+                      FlatButton(
+                        child: Image.network(image2),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      FlatButton(
+                        child: Image.network(image3),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      FlatButton(
+                        child: Image.network(image4),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      FlatButton(
+                        child: Image.network(image5),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  height: 170,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      FlatButton(
+
+                        child: Image.network(image6),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      // Image.network(image1),
+                      FlatButton(
+                        child: Image.network(image7),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      FlatButton(
+                        child: Image.network(image8),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      FlatButton(
+                        child: Image.network(image9),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      FlatButton(
+                        child: Image.network(image10),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  height: 170,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Image.network(image11),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      // Image.network(image1),
+                      FlatButton(
+                        child: Image.network(image12),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      FlatButton(
+                        child: Image.network(image13),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      FlatButton(
+                        child: Image.network(image14),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                      FlatButton(
+                        child: Image.network(image15),
+                        onPressed: () {
+                          bookcaseDialog(context).then((onValue) {});
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   void updateName(String nome) {
     setState(() {
       this._nome = nome;
@@ -509,5 +462,4 @@ class _EstanteState extends State<Estante> {
       this._idAvatar = idAvatar;
     });
   }
-  }
-
+}
