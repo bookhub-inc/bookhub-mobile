@@ -1,18 +1,81 @@
 import "package:flutter/material.dart";
 import "package:Bookhub/cadastrolivros.dart";
 import "package:Bookhub/drawertile.dart";
-import "package:Bookhub/main.dart";
 import "package:Bookhub/login.dart";
-import 'package:Bookhub/api.dart';
 import 'package:Bookhub/estante.dart';
+import 'package:Bookhub/topicos.dart';
+import 'package:Bookhub/main.dart';
+import 'package:Bookhub/models/usuario.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class TelaPerfil extends StatelessWidget{
+
+class TelaPerfil extends StatefulWidget {
+  @override
+
+  _TelaPerfilState createState() => _TelaPerfilState();
+}
+
+class _TelaPerfilState extends State<TelaPerfil> {
+  String _nome = "";
+  String _sobrenome = "";
+  String _user = "";
+  String _email = "";
+  int _id;
+  int _idAvatar;
+  @override
+
+  Future<String> getNamePreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String name = prefs.getString("nome");
+    return name;
+  }
+
+  Future<String> getSobrenomePreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String sobrenome = prefs.getString("sobrenome");
+    return sobrenome;
+  }
+
+  Future<String> getUserPreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String user = prefs.getString("login");
+    return user;
+  }
+
+  Future<String> getEmailPreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String email = prefs.getString("email");
+    return email;
+  }
+
+  Future<int> getIdPreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt("id");
+    return id;
+  }
+  Future<int> getIdAvatarPreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int idAvatar = prefs.getInt("idAvatar");
+    return idAvatar;
+  }
+
+  void initState(){
+    getNamePreference().then(updateName);
+    getSobrenomePreference().then(updateSobrenome);
+    getUserPreference().then(updateUser);
+    getIdPreference().then(updateId);
+    getIdAvatarPreference().then(updateAvatar);
+    getEmailPreference().then(updateEmail);
+    super.initState();
+  }
+
   TextStyle _style() {
     return TextStyle(
         fontWeight: FontWeight.bold
     );
   }
-  final String perfilimg = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRyywga5sMBaxlUA09PmJzhbL9ZGmujLug1LqDqWdxSciDXdZuK';
+
+  String perfilimg = '';
   @override
     /* Color(0xff2A236E), */
 
@@ -62,7 +125,7 @@ class TelaPerfil extends StatelessWidget{
               children: <Widget>[
                 Container(
                   margin: EdgeInsets.only(bottom: 0.0),              //definindo espaçamento entre o próximo conteudo listado
-                  padding: EdgeInsets.fromLTRB(0.0, 8.0, 16.0, 0.0),  //defindo margens dentro do container
+                  padding: EdgeInsets.fromLTRB(0.0, 8.0, 30.0, 0.0),  //defindo margens dentro do container
                   height: 250.0,
                   child: Stack(                                    // criando um stack para que o texto exibido venha por cima do container caso futurammente precise colocar algo no container
                     children: <Widget>[
@@ -73,7 +136,7 @@ class TelaPerfil extends StatelessWidget{
                             children: <Widget>[
                               Material(
                                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                                child: Image.network(TelaPerfil().perfilimg, width: 120.0, height: 120.0,),
+                                child: Image.network("", width: 120.0, height: 120.0,),
 
                               )
                             ],
@@ -82,14 +145,17 @@ class TelaPerfil extends StatelessWidget{
                       ),
 
                       Container(
-                        padding: EdgeInsets.only(top: 165,left: 50, right: 30,), //defindo margem
+                        padding: EdgeInsets.only(top: 165), //defindo margem
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            Text("Nome da Pessoa",
+                            Text("${_nome} ${_sobrenome}",
                               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
+                              textAlign: TextAlign.center,
                             ),
-                            Text("Usuário",
+                            Text("@${_user}",
                               style: TextStyle(fontSize: 15.0, color: Colors.white),
+                                textAlign: TextAlign.center
                             ),
                           ],
                         ),
@@ -106,7 +172,7 @@ class TelaPerfil extends StatelessWidget{
                         DrawerTile(Icons.chat, "Chat", LoginScreen()),//defindo os icones ddo drawer
                         DrawerTile(Icons.settings, "Configuração", LoginScreen()),
                         DrawerTile(Icons.help, "Ajuda", LoginScreen()),
-                        DrawerTile(Icons.exit_to_app, "Sair", LoginScreen()),
+                        DrawerExit(Icons.exit_to_app, "Sair", 3),
                       ],
                     )
                 ),
@@ -124,9 +190,9 @@ class TelaPerfil extends StatelessWidget{
           children: <Widget>[
             iconBottom(Icons.person, TelaPerfil()),
             iconBottom(Icons.bookmark_border, Estante()),
-            iconBottom(Icons.menu, LoginScreen()),
+            iconBottom(Icons.menu, Home()),
             iconBottom(Icons.location_on, LoginScreen()),
-            iconBottom(Icons.toc, LoginScreen()),
+            iconBottom(Icons.toc, Topicos()),
           ],
         ),
       ),
@@ -155,14 +221,14 @@ class TelaPerfil extends StatelessWidget{
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage (perfilimg),
+                          image: NetworkImage (perfilimg.toString()),
                       ),
               ),
             ),
               ),
             ListTile(
-            title: Text("Nome da Pessoa", style: TextStyle(fontSize:30.0), textAlign: TextAlign.center,),
-              subtitle: Text("Descrição", style: TextStyle(fontSize:15.0), textAlign: TextAlign.center,),
+            title: Text("${_nome} ${_sobrenome}", style: TextStyle(fontSize:30.0), textAlign: TextAlign.center,),
+              subtitle: Text("@${_user}", style: TextStyle(fontSize:15.0), textAlign: TextAlign.center,),
                 trailing: Icon(Icons.more_vert),
               onTap: (){
 
@@ -174,7 +240,7 @@ class TelaPerfil extends StatelessWidget{
             Divider(color: Colors.grey,),
             Text("Email", style: _style(),),
             SizedBox(height: 4,),
-            Text("milan@gmail.com"),
+            Text("${_email}"),
             SizedBox(height: 16,),
 
             Text("Cidade/País", style: _style(),),
@@ -214,5 +280,45 @@ Navigator.pushReplacement(context,
       ),
       ),
     );
+  }
+
+  void updateName(String nome){
+
+    setState((){
+      this._nome = nome;
+    });
+  }
+  void updateSobrenome(String sobrenome){
+
+    setState((){
+      this._sobrenome = sobrenome;
+    });
+  }
+  void updateUser (String user){
+
+    setState((){
+      this._user = user;
+    });
+  }
+
+  void updateEmail (String email){
+
+    setState((){
+      this._email = email;
+    });
+  }
+
+  void updateId(int id){
+
+    setState((){
+      this._id = id;
+    });
+  }
+
+  void updateAvatar(int idAvatar){
+
+    setState((){
+      this._idAvatar = idAvatar;
+    });
   }
 }
