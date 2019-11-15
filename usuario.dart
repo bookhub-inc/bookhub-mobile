@@ -1,0 +1,25 @@
+class Usuario {
+  final int id;
+  final String nome;
+  final String sobrenome;
+  final String telefone;
+  final int idAvatar;
+  final String email;
+  final String login;
+  final String senha;
+
+
+  Usuario({this.id, this.nome, this.sobrenome, this.telefone, this.idAvatar, this.email, this.login, this.senha});
+
+  factory Usuario.fromJson(Map<String, dynamic> parsedJson) {
+    Map json = parsedJson;
+    return Usuario(
+         nome: json['nome'],
+        sobrenome: json['sobrenome'],
+     telefone: json['telefone'],
+    email: json['email'],
+    login: json['login'],
+    senha: json['senha'],
+    );
+  }
+}
