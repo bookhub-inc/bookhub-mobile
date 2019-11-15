@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:Bookhub/posts.dart';
 
-Future createPost(String nome, String sobrenome, String usuario, String senha, String email, String Telefone, int id) async {
-  var jsonText = jsonEncode({'nome': nome, 'sobrenome' : sobrenome, 'login': usuario, 'senha': senha, 'email': email, 'telefone': Telefone, 'idAvatar':id});
+Future createPost(String nome, String sobrenome, String usuario, String senha, String email, String Telefone) async {
+  var jsonText = jsonEncode({'nome': nome, 'sobrenome': sobrenome, 'login': usuario, 'senha': senha, 'email': email, 'telefone': Telefone});
 
   var url = 'http://ec2-52-67-248-77.sa-east-1.compute.amazonaws.com:8080/usuario';
   var response = await http.post(url,
@@ -15,8 +16,25 @@ Future createPost(String nome, String sobrenome, String usuario, String senha, S
 
 }
 
+Future<List<Post>> getPosts() async {
+  var posts = List<Post>();
+  // Get user posts for id
+  var response = await http.get('http://ec2-52-67-248-77.sa-east-1.compute.amazonaws.com:8080/topico');
+
+  // parse into List
+  var parsed = json.decode(response.body) as List<dynamic>;
+
+  // loop and convert each item to Post
+  for (var post in parsed) {
+    posts.add(Post.fromJson(post));
+  }
+
+  return posts;
+}
+
+//Métodos GET, POST, PUT, DELETE
 class Urls {
-  static const BASE_API_URL = "http://ec2-52-67-248-77.sa-east-1.compute.amazonaws.com:8080/usuario";
+  static const BASE_API_URL = "http://ec2-52-67-248-77.sa-east-1.compute.amazonaws.com:8080/";
 }
 
 class ApiService {
@@ -26,16 +44,47 @@ class ApiService {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         return json.decode(response.body);
+
       } else {
         return null;
       }
     } catch (ex) {
-      return null;
+      throw Exception ("Login invalido");
     }
   }
 
-  static Future<List<dynamic>> getUserList() async {
-    return await _get('${Urls.BASE_API_URL}');
+  static Future<List<dynamic>> getUser(int userId) async {
+    return await _get('${Urls.BASE_API_URL}/usuario/$userId');
   }
+
+  static Future<List<dynamic>> getUsersList() async {
+    return await _get('${Urls.BASE_API_URL}/usuario');
+  }
+
+  static Future<List<dynamic>> getPostList() async {
+    return await _get('${Urls.BASE_API_URL}/topico');
+  }
+
+  static Future<dynamic> getPost(int postId) async {
+    return await _get('${Urls.BASE_API_URL}/topico/$postId');
+  }
+
+  static Future<dynamic> getCommentsForPost(int postId) async {
+    return await _get('${Urls.BASE_API_URL}/posts/$postId/comments');
+  }
+
+  static Future addPost(String titulo, String descricao, bool spoiler, int idUser) async {
+    var jsonText = jsonEncode({'titulo': titulo, 'descricao': descricao, 'spoiler': spoiler, "idUsuario": idUser});
+
+    var url = 'http://ec2-52-67-248-77.sa-east-1.compute.amazonaws.com:8080/topico';
+    var response = await http.post(url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonText);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+    print(await http.read('http://ec2-52-67-248-77.sa-east-1.compute.amazonaws.com:8080/topico'));
+
+  }
+
 
 }
