@@ -1,10 +1,16 @@
 import "package:flutter/material.dart";
-import 'package:projetodetestes/TelaCadastro.dart';
+import 'package:Bookhub/tela_perfil.dart';
+import 'package:Bookhub/drawertile.dart';
+import 'package:Bookhub/login.dart';
+import 'package:Bookhub/cadastrolivros.dart';
+import 'package:Bookhub/estante.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:core';
+import 'package:Bookhub/api.dart';
+import 'package:Bookhub/models/usuario.dart';
+import 'package:Bookhub/topicos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'CadastroLivros.dart';
-import 'DrawerTile.dart';
-import 'LoginScreen.dart';
-import 'TelaPerfil.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -21,17 +27,48 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  String _name = "";
+  String _nome = "";
+  String _sobrenome = "";
+  String _user = "";
+  int _id;
+  int _idAvatar;
   @override
 
   Future<String> getNamePreference() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String name = prefs.getString("name");
+    String name = prefs.getString("nome");
     return name;
+  }
+
+  Future<String> getSobrenomePreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String sobrenome = prefs.getString("sobrenome");
+    return sobrenome;
+  }
+
+  Future<String> getUserPreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String user = prefs.getString("login");
+    return user;
+  }
+
+  Future<int> getIdPreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt("id");
+    return id;
+  }
+  Future<int> getIdAvatarPreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt("idAvatar");
+    return id;
   }
 
   void initState(){
     getNamePreference().then(updateName);
+    getSobrenomePreference().then(updateSobrenome);
+    getUserPreference().then(updateUser);
+    getIdPreference().then(updateId);
+    getIdAvatarPreference().then(updateAvatar);
     super.initState();
   }
 
@@ -58,10 +95,18 @@ class _HomeState extends State<Home> {
     return IconButton(
       icon: Icon(simbolo),
       color: Colors.white,
-      onPressed: () {Navigator.push(
+      onPressed: () {Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => page),
       );
+      },
+    );
+  }
+  IconButton iconSair(IconData simbolo, Widget page) {
+    return IconButton(
+      icon: Icon(simbolo),
+      color: Colors.white,
+    onPressed: () {Navigator.of(context).popUntil((route) => route.settings.name == page);
       },
     );
   }
@@ -81,7 +126,6 @@ class _HomeState extends State<Home> {
     );
     /* Color(0xff2A236E), */
   }
-
   @override
   Widget build(BuildContext context) {
     _buildDrawerBack() => Container(            //criando uma função e dando o nome de build Drawer Back
@@ -128,7 +172,7 @@ class _HomeState extends State<Home> {
                             children: <Widget>[
                               Material(
                                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                                child: Image.network(TelaPerfil().perfilimg, width: 120.0, height: 120.0,),
+                                child: Image.network("", width: 120.0, height: 120.0,),
 
                               )
                             ],
@@ -140,10 +184,10 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.only(top: 165,left: 50, right: 30,), //defindo margem
                         child: Column(
                           children: <Widget>[
-                            Text(_name,
+                            Text('${_nome} ${_sobrenome}',
                               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
-                            Text("@username",
+                            Text("@${_user}",
                               style: TextStyle(fontSize: 15.0, color: Colors.white),
                             ),
                           ],
@@ -158,10 +202,10 @@ class _HomeState extends State<Home> {
                     child: Column(
                       children: <Widget>[
                         DrawerTile(Icons.book, "Cadastro de Livros", CadastroLivros()),
-                        DrawerTile(Icons.chat, "Chat", Home()),//defindo os icones ddo drawer
-                        DrawerTile(Icons.settings, "Configuração", Home()),
-                        DrawerTile(Icons.help, "Ajuda", Home()),
-                        DrawerTile(Icons.exit_to_app, "Sair", LoginScreen()),
+                        DrawerTile(Icons.chat, "Chat", LoginScreen()),//defindo os icones ddo drawer
+                        DrawerTile(Icons.settings, "Configuração", LoginScreen()),
+                        DrawerTile(Icons.help, "Ajuda", LoginScreen()),
+                        DrawerExit(Icons.exit_to_app, "Sair", 1),
                       ],
                     )
                 ),
@@ -178,110 +222,137 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             iconBottom(Icons.person, TelaPerfil()),
-            iconBottom(Icons.bookmark_border, Home()),
+            iconBottom(Icons.bookmark_border, Estante()),
             iconBottom(Icons.menu, Home()),
-            iconBottom(Icons.location_on, Home()),
-            iconBottom(Icons.toc, Home()),
+            iconBottom(Icons.location_on, LoginScreen()),
+            iconBottom(Icons.toc, Topicos()),
+
           ],
         ),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget> [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20.0),
-              height: 250,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQJWz7PeZmcNQp_svDznslTjfal2Oksb2j4VFwv3lzMw8WBWt3E", "Teste1", "Teste2"),
-                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTluY_u--YSm9Yi5k10bdzdoL0nKKcpC8Nxvs7T9rH2mfz8b_-v", "Teste1", "Teste2"),
-                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1bKS_TTRyr8UryRNVN4OBQRdYkIQSwoPlDsPy8RysIRFX5w-B", "Teste1", "Teste2"),
-                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWXpbiJWEeEGPuiqRuviFxjFJPrDB8UkmXsKHDsg_ATnh1rC4o", "Teste1", "Teste2"),
-                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQkTQNBFPFC1e7qcXBgXXT-n4ToahKMj4I20I44AfbBAYgktzA", "Teste1", "Teste2"),
-                ],
-              ),
-            ),
-
-            Text("Tópicos", textAlign: TextAlign.center,),
-            Divider(),
-            myTopic(Colors.blue, "Qual o segredo da bíblia?"),
-            myTopic(Color(0xff2A236E), "Quando sai a sequência de Game of Thrones?"),
-            myTopic(Colors.blue, "Netflix comprará Percy Jackson?"),
-            myTopic(Color(0xff2A236E), "SPOILER ALERT: Esse personagem vive ou morre?"),
-            FlatButton(
-              color: Color(0xff2A236E),
-              textColor: Colors.white,
-              disabledColor: Colors.grey,
-              disabledTextColor: Colors.black,
-              padding: EdgeInsets.all(8.0),
-              splashColor: Colors.blueAccent,
-              onPressed: () {
-                /*...*/
-              },
-              child: Text("Veja mais"),
-            ),
-            Divider(),
-            Text("Loja", textAlign: TextAlign.center,),
-            ButtonBar(
-              mainAxisSize: MainAxisSize.max,
-              alignment: MainAxisAlignment.spaceBetween,
+   child: Column(
+     crossAxisAlignment: CrossAxisAlignment.stretch,
+     mainAxisSize: MainAxisSize.min,
+    children: <Widget> [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 20.0),
+            height: 250,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
               children: <Widget>[
-                OutlineButton(
-                  onPressed: () {},
-                  child: Text("Novo"),
-                  borderSide: BorderSide(color: Colors.blue),
-                  shape: StadiumBorder(),
-                ),
-                OutlineButton(
-                  onPressed: () {},
-                  child: Text("Recomendado"),
-                  borderSide: BorderSide(color: Colors.blue),
-                  shape: StadiumBorder(),
-                ),
-                OutlineButton(
-                  onPressed: () {},
-                  child: Text("Menor Preço"),
-                  borderSide: BorderSide(color: Colors.blue),
-                  shape: StadiumBorder(),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Escreva o nome do livro"
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQJWz7PeZmcNQp_svDznslTjfal2Oksb2j4VFwv3lzMw8WBWt3E", "Teste1", "Teste2"),
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTluY_u--YSm9Yi5k10bdzdoL0nKKcpC8Nxvs7T9rH2mfz8b_-v", "Teste1", "Teste2"),
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1bKS_TTRyr8UryRNVN4OBQRdYkIQSwoPlDsPy8RysIRFX5w-B", "Teste1", "Teste2"),
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWXpbiJWEeEGPuiqRuviFxjFJPrDB8UkmXsKHDsg_ATnh1rC4o", "Teste1", "Teste2"),
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQkTQNBFPFC1e7qcXBgXXT-n4ToahKMj4I20I44AfbBAYgktzA", "Teste1", "Teste2"),
+      ],
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  color: Colors.blue,
-                  onPressed: () {},
-                )
-              ],
-            ),
-          ],
-        ),
+
+                              Text("Tópicos", textAlign: TextAlign.center,),
+                              Divider(),
+                              myTopic(Colors.blue, "Qual o segredo da bíblia?"),
+      myTopic(Color(0xff2A236E), "Quando sai a sequência de Game of Thrones?"),
+      myTopic(Colors.blue, "Netflix comprará Percy Jackson?"),
+      myTopic(Color(0xff2A236E), "SPOILER ALERT: Esse personagem vive ou morre?"),
+      FlatButton(
+        color: Color(0xff2A236E),
+        textColor: Colors.white,
+        disabledColor: Colors.grey,
+        disabledTextColor: Colors.black,
+        padding: EdgeInsets.all(8.0),
+        splashColor: Colors.blueAccent,
+        onPressed: () {
+          /*...*/
+        },
+        child: Text("Veja mais"),
+      ),
+      Divider(),
+      Text("Loja", textAlign: TextAlign.center,),
+      ButtonBar(
+          mainAxisSize: MainAxisSize.max,
+          alignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+          OutlineButton(
+          onPressed: () {},
+      child: Text("Novo"),
+      borderSide: BorderSide(color: Colors.blue),
+      shape: StadiumBorder(),
+    ),
+    OutlineButton(
+    onPressed: () {},
+    child: Text("Recomendado"),
+    borderSide: BorderSide(color: Colors.blue),
+    shape: StadiumBorder(),
+    ),
+    OutlineButton(
+    onPressed: () {},
+    child: Text("Menor Preço"),
+    borderSide: BorderSide(color: Colors.blue),
+    shape: StadiumBorder(),
+    ),
+                              ],
+      ),
+      Row(
+        children: <Widget>[
+          Expanded(
+      child: TextField(
+        textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "Escreva o nome do livro"
+          ),
+      ),
+    ),
+          IconButton(
+            icon: Icon(Icons.send),
+            color: Colors.blue,
+            onPressed: () {},
+          )
+    ],
+   ),
+      ],
+    ),
       ),
     );
   }
 
 
 
-  void updateName( String name ){
+  void updateName(String nome){
 
     setState((){
-      this._name = name;
+      this._nome = nome;
+    });
+  }
+  void updateSobrenome(String sobrenome){
+
+    setState((){
+      this._sobrenome = sobrenome;
+    });
+  }
+  void updateUser (String user){
+
+    setState((){
+      this._user = user;
+    });
+  }
+  void updateId(int id){
+
+    setState((){
+      this._id = id;
+    });
+  }
+
+  void updateAvatar(int idAvatar){
+
+    setState((){
+      this._idAvatar = idAvatar;
     });
   }
 
 }
+
 
