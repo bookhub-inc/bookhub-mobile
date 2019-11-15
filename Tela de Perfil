@@ -20,6 +20,7 @@ class _TelaPerfilState extends State<TelaPerfil> {
   String _sobrenome = "";
   String _user = "";
   String _email = "";
+  String _telefone = "";
   int _id;
   int _idAvatar;
   @override
@@ -28,6 +29,12 @@ class _TelaPerfilState extends State<TelaPerfil> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String name = prefs.getString("nome");
     return name;
+  }
+
+  Future<String> getTelefonePreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String telefone = prefs.getString("telefone");
+    return telefone;
   }
 
   Future<String> getSobrenomePreference() async{
@@ -66,6 +73,7 @@ class _TelaPerfilState extends State<TelaPerfil> {
     getIdPreference().then(updateId);
     getIdAvatarPreference().then(updateAvatar);
     getEmailPreference().then(updateEmail);
+    getTelefonePreference().then(updateTelefone);
     super.initState();
   }
 
@@ -243,9 +251,9 @@ class _TelaPerfilState extends State<TelaPerfil> {
             Text("${_email}"),
             SizedBox(height: 16,),
 
-            Text("Cidade/País", style: _style(),),
+            Text("Telefone", style: _style(),),
             SizedBox(height: 4,),
-            Text("New York, USA"),
+            Text("${_telefone}"),
             SizedBox(height: 16,),
 
             Text("Livro favorito", style: _style(),),
@@ -292,6 +300,13 @@ Navigator.pushReplacement(context,
 
     setState((){
       this._sobrenome = sobrenome;
+    });
+  }
+
+  void updateTelefone(String telefone){
+
+    setState((){
+      this._telefone = telefone;
     });
   }
   void updateUser (String user){
