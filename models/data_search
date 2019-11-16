@@ -1,12 +1,18 @@
+import 'dart:convert';
+import 'dart:core';
+import 'package:bookhub/models/livros.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-class DataSearch extends SearchDelegate<String>{
+class DataSearch extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
         icon: Icon(Icons.clear),
-        onPressed: (){},
+        onPressed: () {
+          query = "";
+        },
       )
     ];
   }
@@ -18,11 +24,10 @@ class DataSearch extends SearchDelegate<String>{
         icon: AnimatedIcons.menu_arrow,
         progress: transitionAnimation,
       ),
-      onPressed: (){
+      onPressed: () {
         close(context, null);
       },
     );
-
   }
 
   @override
@@ -34,12 +39,48 @@ class DataSearch extends SearchDelegate<String>{
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    return Container(
+    if (query.isEmpty)
+      return Container();
+    else
+      return FutureBuilder<List>(
+        future: suggestions(query),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(snapshot.data[index]),
+                  leading: Icon(Icons.play_arrow),
+                  onTap: () {
+                    close(context, snapshot.data[index]);
+                  },
+                );
+              },
+              itemCount: snapshot.data.length,
+            );
+          }
+        },
+      );
+  }
 
+  Future <List> suggestions(String search) async {
+
+    String livrourl = search.replaceAll(' ', "%20");
+
+
+
+    final books = await http.get(
+        "http://ec2-54-233-230-135.sa-east-1.compute.amazonaws.com:8080/livro?nome=${livrourl}"
     );
+    
+
   }
 
 
+  }
 
-}
+
