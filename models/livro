@@ -1,0 +1,27 @@
+class Livro{
+
+  final String nome;
+  final String autor;
+  final String editora;
+  final String descricao;
+  final String url;
+  final String categorias;
+
+
+  Livro({this.nome,this.autor,this.editora,this.descricao,this.url,this.categorias});
+
+  factory Livro.fromJson(Map<String, dynamic> json){
+
+    return
+      Livro(
+          nome: json["nome"],
+          autor: json["autor"],
+          editora: json["editora"],
+          descricao: json['descricao'],
+          url: json["url"],
+          categorias: json["categorias"],
+      );
+
+  }
+
+}
