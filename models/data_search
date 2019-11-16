@@ -3,6 +3,31 @@ import 'dart:core';
 import 'package:bookhub/models/livros.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'dart:async';
+
+Future <List<Livro>> getlivro() async{
+
+  var data = await http.get("http://ec2-54-233-230-135.sa-east-1.compute.amazonaws.com:8080/livro");
+  var  jsonData = json.decode(data.body);
+
+  List<Livro> livros = [];
+
+  for (var u in jsonData){
+
+    Livro livro = Livro(u["nome"],u["autor"],u["editora"],u["descricao"],u["url"],u["categoria"]);
+
+    livros.add(livro);
+
+  }
+
+  print(livros.length);
+
+  return livros;
+
+}
+
+
+
 
 class DataSearch extends SearchDelegate<String> {
   @override
@@ -30,57 +55,53 @@ class DataSearch extends SearchDelegate<String> {
     );
   }
 
+
+
+
+
+
+
+
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    return Container(
-    );
+   return Container(
+     child: FutureBuilder(
+       future: getlivro(),
+       builder: (BuildContext context, AsyncSnapshot snapshot){
+
+         if(snapshot.data == null){
+           return Container(
+             child: Center(
+               child: Text("Loading..."),
+             ),
+           );
+         } else {
+           return ListView.builder(
+             itemCount: snapshot.data.length,
+             itemBuilder: (BuildContext context, int index) {
+               return Container(
+                   child:ListTile(
+                     leading: CircleAvatar(
+                       backgroundImage: NetworkImage(snapshot.data[index].url),
+                     ),
+                   title: Text(snapshot.data[index].nome),
+
+                   ),
+               );
+             },
+           );
+         }
+       },
+     ),
+   );
+
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (query.isEmpty)
-      return Container();
-    else
-      return FutureBuilder<List>(
-        future: suggestions(query),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(snapshot.data[index]),
-                  leading: Icon(Icons.play_arrow),
-                  onTap: () {
-                    close(context, snapshot.data[index]);
-                  },
-                );
-              },
-              itemCount: snapshot.data.length,
-            );
-          }
-        },
-      );
+    return Container();
   }
 
-  Future <List> suggestions(String search) async {
-
-    String livrourl = search.replaceAll(' ', "%20");
-
-
-
-    final books = await http.get(
-        "http://ec2-54-233-230-135.sa-east-1.compute.amazonaws.com:8080/livro?nome=${livrourl}"
-    );
-    
-
-  }
-
-
-  }
+}
 
 
