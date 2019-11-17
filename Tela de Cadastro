@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:Bookhub/main.dart';
-import 'package:Bookhub/api.dart';
-import 'package:Bookhub/login.dart';
+
+import 'LoginScreen.dart';
+import 'api.dart';
+
 
 
 final _formChave = GlobalKey<FormState>();
@@ -81,263 +82,264 @@ class TelaCadastro extends StatelessWidget {
     );
     return Scaffold(
       body: Stack(
-    children: <Widget>[
-    _buildDrawerBack(),
-    Container(
-    padding: EdgeInsets.only(top: 20,left: 20, right: 20,), //defindo margem
-    child: Form(
-        key: _formChave,
-        child: ListView(
-    children: <Widget>[
-    SizedBox(
-    height: 40,
-    ),
-    Container(
-    child: Text(
-    "Seja bem-vindo ao BookHub",
-    textAlign: TextAlign.center,
-    style: TextStyle(
-    color: Colors.white,
-    fontSize: 20,
-    ),
-    ),
+          children: <Widget>[
+            _buildDrawerBack(),
+            Container(
+              padding: EdgeInsets.only(top: 20,left: 20, right: 20,), //defindo margem
+              child: Form(
+                  key: _formChave,
+                  child: ListView(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        child: Text(
+                          "Seja bem-vindo ao BookHub",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
 
-    ),
-    SizedBox(
-    height: 50, //espaçamento entre o texto e imagem
-    ),
-    Container(
-    child: TextFormField(
-controller: nomeController,
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Insira seu nome";
-          return null;
-        }
-      },
-    decoration: InputDecoration(
-    border: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.white),
-    ),
-    labelText: "Nome",
-    labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
-    color: Colors.white,
-    fontWeight: FontWeight.w400, //grossura do texto
-    fontSize: 15,
-    ),
-    ),
-    style: TextStyle ( //definindo fonte do texto de entreada
-    fontSize: 15,
-    color: Colors.white,
-    ),
-    ),
-    ),
-      SizedBox(
-        height: 20,
-      ),
-      Container(
-        child: TextFormField(
-          controller: sobrenomeController,
-          validator: (value) {
-            if (value.isEmpty) {
-              return "Insira seu sobrenome";
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
+                      ),
+                      SizedBox(
+                        height: 50, //espaçamento entre o texto e imagem
+                      ),
+                      Container(
+                        child: TextFormField(
+                          controller: nomeController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Insira seu nome";
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            labelText: "Nome",
+                            labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400, //grossura do texto
+                              fontSize: 15,
+                            ),
+                          ),
+                          style: TextStyle ( //definindo fonte do texto de entreada
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        child: TextFormField(
+                          controller: sobrenomeController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Insira seu sobrenome";
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            labelText: "Sobrenome",
+                            labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400, //grossura do texto
+                              fontSize: 15,
+                            ),
+                          ),
+                          style: TextStyle ( //definindo fonte do texto de entreada
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        child: TextFormField(
+                          controller: usuarioController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Insira seu usuario";
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            labelText: "Usuário",
+                            labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400, //grossura do texto
+                              fontSize: 15,
+                            ),
+                          ),
+                          style: TextStyle ( //definindo fonte do texto de entreada
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        child: TextFormField(
+                          controller: telefoneController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Insira o telefone";
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            labelText: "Telefone",
+                            labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400, //grossura do texto
+                              fontSize: 15,
+                            ),
+                          ),
+                          style: TextStyle ( //definindo fonte do texto de entreada
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                          keyboardType: TextInputType.phone,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        child: TextFormField(
+                          controller: emailController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Insira o e-mail";
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                            ),
+                            labelText: "E-mail",
+                            labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400, //grossura do texto
+                              fontSize: 15,
+                            ),
+                          ),
+                          style: TextStyle ( //definindo fonte do texto de entreada
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        child: TextFormField(
+                          controller: senhaController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Insira a senha.";
+                            }
+                            if (value.length < 6) {
+                              return "Senha muito pequena.";
+                            }
+                          },
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                            ),
+                            labelText: "Senha",
+                            labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400, //grossura do texto
+                              fontSize: 15,
+                            ),
+                          ),
+                          style: TextStyle ( //definindo fonte do texto de entreada
+                            fontSize: 15,
+                            color: Colors.white,
+
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 10,left: 55, right: 55,), //defindo margem
+                        child: Container( //container para botão de login
+                          height: 60,
+                          decoration: BoxDecoration(
+                              color: Color(0xff2A236E),
+                              borderRadius: BorderRadius.all( //dando formato ao botão
+                                Radius.circular(5),
+                              )
+                          ),
+                          child: FlatButton(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    "Cadastrar",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
+
+                                  )
+                                ],
+                              ),
+                              onPressed: () async {
+                                if (nomeController.text.isEmpty || nomeController.text.isEmpty ||
+                                    usuarioController.text.isEmpty
+                                    || senhaController.text.isEmpty || emailController.text.isEmpty ||
+                                    telefoneController.text.isEmpty || sobrenomeController.text.isEmpty) {
+                                  _showDialog("Campo em branco", "Por favor, preencha todos os dados");
+                                }
+                                else {
+                                  if (_formChave.currentState.validate()) {
+                                    createPost(
+                                        nomeController.text, sobrenomeController.text, usuarioController.text, senhaController.text,
+                                        emailController.text, telefoneController.text)
+                                        .whenComplete(() =>
+                                        _cadastroUser("Usuário cadastrado com sucesso", "Obrigado por se cadastrar no Bookhub!")
+                                    );
+
+
+                                  }
+                                  else {
+                                    return Text("Usuário não cadastrado");
+                                  }
+                                }; //definir para onde vai!!!!
+                              }),
+                        ),
+                      ),
+                    ],
+                  )
+              ),
             ),
-            labelText: "Sobrenome",
-            labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
-              color: Colors.white,
-              fontWeight: FontWeight.w400, //grossura do texto
-              fontSize: 15,
-            ),
-          ),
-          style: TextStyle ( //definindo fonte do texto de entreada
-            fontSize: 15,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    SizedBox(
-    height: 20,
-    ),
-    Container(
-    child: TextFormField(
-      controller: usuarioController,
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Insira seu usuario";
-          return null;
-        }
-      },
-    decoration: InputDecoration(
-    border: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.white),
-    ),
-    labelText: "Usuário",
-    labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
-    color: Colors.white,
-    fontWeight: FontWeight.w400, //grossura do texto
-    fontSize: 15,
-    ),
-    ),
-    style: TextStyle ( //definindo fonte do texto de entreada
-    fontSize: 15,
-    color: Colors.white,
-    ),
-    ),
-    ),
-    SizedBox(
-    height: 20,
-    ),
-    Container(
-    child: TextFormField(
-      controller: telefoneController,
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Insira o telefone";
-          return null;
-        }
-      },
-    decoration: InputDecoration(
-    border: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.white),
-    ),
-    labelText: "Telefone",
-    labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
-    color: Colors.white,
-    fontWeight: FontWeight.w400, //grossura do texto
-    fontSize: 15,
-    ),
-    ),
-    style: TextStyle ( //definindo fonte do texto de entreada
-    fontSize: 15,
-    color: Colors.white,
-    ),
-    ),
-    ),
-    SizedBox(
-    height: 20,
-    ),
-    Container(
-    child: TextFormField(
-      controller: emailController,
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Insira o e-mail";
-          return null;
-        }
-      },
-    decoration: InputDecoration(
-    border: OutlineInputBorder(
-    ),
-    labelText: "E-mail",
-    labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
-    color: Colors.white,
-    fontWeight: FontWeight.w400, //grossura do texto
-    fontSize: 15,
-    ),
-    ),
-    style: TextStyle ( //definindo fonte do texto de entreada
-    fontSize: 15,
-    color: Colors.white,
-    ),
-    ),
-    ),
-    SizedBox(
-    height: 20,
-    ),
-    Container(
-    child: TextFormField(
-      controller: senhaController,
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Insira a senha.";
-        }
-        if (value.length < 6) {
-          return "Senha muito pequena.";
-        }
-      },
-    obscureText: true,
-    decoration: InputDecoration(
-    border: OutlineInputBorder(
-    ),
-    labelText: "Senha",
-    labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
-    color: Colors.white,
-    fontWeight: FontWeight.w400, //grossura do texto
-    fontSize: 15,
-    ),
-    ),
-    style: TextStyle ( //definindo fonte do texto de entreada
-    fontSize: 15,
-    color: Colors.white,
-
-    ),
-    ),
-    ),
-
-    SizedBox(
-    height: 50,
-    ),
-    Container(
-    padding: EdgeInsets.only(top: 10,left: 55, right: 55,), //defindo margem
-    child: Container( //container para botão de login
-    height: 60,
-    decoration: BoxDecoration(
-    color: Color(0xff2A236E),
-    borderRadius: BorderRadius.all( //dando formato ao botão
-    Radius.circular(5),
-    )
-    ),
-    child: FlatButton(
-    child: Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-    Text(
-    "Cadastrar",
-    style: TextStyle(
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-    fontSize: 20,
-    ),
-
-    )
-    ],
-    ),
-    onPressed: () async {
-      if (nomeController.text.isEmpty || nomeController.text.isEmpty ||
-          usuarioController.text.isEmpty
-          || senhaController.text.isEmpty || emailController.text.isEmpty ||
-          telefoneController.text.isEmpty || sobrenomeController.text.isEmpty) {
-        _showDialog("Campo em branco", "Por favor, preencha todos os dados");
-      }
-      else {
-        if (_formChave.currentState.validate()) {
-          createPost(
-              nomeController.text, sobrenomeController.text, usuarioController.text, senhaController.text,
-              emailController.text, telefoneController.text)
-              .whenComplete(() =>
-              _cadastroUser("Usuário cadastrado com sucesso", "Obrigado por se cadastrar no Bookhub!")
-          );
-
-
-              }
-        else {
-          return Text("Usuário não cadastrado");
-        }
-      }; //definir para onde vai!!!!
-    }),
-    ),
-    ),
-    ],
-    )
-    ),
-    ),
-    ]
+          ]
       ),
     );
 
