@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:bookhub/TelaEstante.dart';
 import 'package:bookhub/models/livros.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -9,9 +10,6 @@ import 'dart:async';
 
 
 class DataSearch extends SearchDelegate<String> {
-
-
-
 
 
   @override
@@ -66,9 +64,16 @@ class DataSearch extends SearchDelegate<String> {
              itemBuilder: (BuildContext context, int index) {
                return Container(
                    child:ListTile(
-                   
+                     leading: CircleAvatar(
+                       backgroundImage: NetworkImage(snapshot.data[index].url),
+                     ),
                    title: Text(snapshot.data[index].nome),
-
+                     subtitle: Text(snapshot.data[index].autor),
+                     onTap: (){
+                       Navigator.push(context,
+                       new MaterialPageRoute(builder: (context) => Estante())
+                       );
+                     },
                    ),
                );
              },
@@ -94,7 +99,7 @@ class DataSearch extends SearchDelegate<String> {
 
     for (var u in jsonData){
 
-      Livro livro = Livro(u["nome"]);
+      Livro livro = Livro(u["nome"],u["autor"],u["editora"],u["descricao"],u["url"],u["categoria"],u["npaginas"]);
 
       livros.add(livro);
 
