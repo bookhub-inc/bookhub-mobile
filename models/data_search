@@ -5,31 +5,15 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-Future <List<Livro>> getlivro() async{
-
-  var data = await http.get("http://ec2-54-233-230-135.sa-east-1.compute.amazonaws.com:8080/livro");
-  var  jsonData = json.decode(data.body);
-
-  List<Livro> livros = [];
-
-  for (var u in jsonData){
-
-    Livro livro = Livro(u["nome"],u["autor"],u["editora"],u["descricao"],u["url"],u["categoria"]);
-
-    livros.add(livro);
-
-  }
-
-  print(livros.length);
-
-  return livros;
-
-}
-
 
 
 
 class DataSearch extends SearchDelegate<String> {
+
+
+
+
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -64,9 +48,10 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
+
    return Container(
      child: FutureBuilder(
-       future: getlivro(),
+       future: getlivro(query),
        builder: (BuildContext context, AsyncSnapshot snapshot){
 
          if(snapshot.data == null){
@@ -81,14 +66,13 @@ class DataSearch extends SearchDelegate<String> {
              itemBuilder: (BuildContext context, int index) {
                return Container(
                    child:ListTile(
-                     leading: CircleAvatar(
-                       backgroundImage: NetworkImage(snapshot.data[index].url),
-                     ),
+                   
                    title: Text(snapshot.data[index].nome),
 
                    ),
                );
              },
+
            );
          }
        },
@@ -96,6 +80,44 @@ class DataSearch extends SearchDelegate<String> {
    );
 
   }
+
+
+  Future <List<Livro>> getlivro(String search) async{
+
+    search = query;
+
+    List<Livro> livros = [];
+
+    var data = await http.get("http://ec2-54-233-230-135.sa-east-1.compute.amazonaws.com:8080/livro?nome=$search");
+    var  jsonData = json.decode(data.body);
+
+
+    for (var u in jsonData){
+
+      Livro livro = Livro(u["nome"]);
+
+      livros.add(livro);
+
+    }
+
+    print(livros.length);
+
+    return livros;
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 
   @override
   Widget buildSuggestions(BuildContext context) {
