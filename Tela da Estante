@@ -52,61 +52,6 @@ class _EstanteState extends State<Estante> {
   }
 
   @override
-  Future <String> bookcaseDialog(BuildContext context) {
-    TextEditingController customController = new TextEditingController();
-
-    return showDialog(context: context, builder: (context) {
-      return AlertDialog(
-        title: Text(
-            "Informações sobre o Livro"
-        ),
-        content:
-        Text(
-          "Título: Textos Cruéis Demais para Serem Lidos Rapidamente"
-              "\nSinopse: Atende douglas?"
-              "\nAutor: Jãozin"
-              "\nEditora: Me precupa a implementação com o Backend e BD"
-              "\nGenero: Não me julgue"
-              "\nClassificação: Sem chororo"
-              "\nTema: Nozes que lute",
-
-        ),
-      );
-    });
-  }
-
-
-  Future <String> searchDialog(BuildContext context) {
-    TextEditingController customController = new TextEditingController();
-
-    return showDialog(context: context, builder: (context) {
-      return AlertDialog(
-        title: Text(
-            "Pesquisar Livro"
-        ),
-        content: TextFormField(
-          controller: customController,
-          decoration: InputDecoration(
-            labelText: "Nome do Livro",
-            labelStyle: TextStyle( //definindo fonte da label "caixinha de texto"
-              color: Colors.black,
-              fontWeight: FontWeight.w400, //grossura do texto
-              fontSize: 15,
-            ),
-          ),
-        ),
-        actions: <Widget>[
-          MaterialButton(
-            elevation: 5.0,
-            child: Text("Procurar"),
-            onPressed: () {
-              Navigator.of(context).pop(customController.text.toString());
-            },
-          ),
-        ],
-      );
-    });
-  }
 
 
 
@@ -170,35 +115,15 @@ class _EstanteState extends State<Estante> {
               )
           ),
         );
-    void _showDialog() {
-      // flutter defined function
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          // return object of type Dialog
-          return AlertDialog(
-            title: new Text("Livro registrado!"),
-            content: new Text("Obrigado por sua colaboração!"),
-            actions: <Widget>[
-              // usually buttons at the bottom of the dialog
-              new FlatButton(
-                child: new Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Bookhub"),
         backgroundColor: Color(0xff2A236E),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.add_circle),
+            iconSize: 35,
             onPressed: () {
               showSearch(context: context, delegate: DataSearch());
             },
@@ -313,124 +238,11 @@ class _EstanteState extends State<Estante> {
             child: Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: 30, left: 20, right: 20),
-                  height: 170,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Image.network(image1),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      // Image.network(image1),
-                      FlatButton(
-                        child: Image.network(image2),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      FlatButton(
-                        child: Image.network(image3),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      FlatButton(
-                        child: Image.network(image4),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      FlatButton(
-                        child: Image.network(image5),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
                   margin: EdgeInsets.only(top: 20, left: 20, right: 20),
                   height: 170,
                   child: ListView(
-                    scrollDirection: Axis.horizontal,
                     children: <Widget>[
-                      FlatButton(
 
-                        child: Image.network(image6),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      // Image.network(image1),
-                      FlatButton(
-                        child: Image.network(image7),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      FlatButton(
-                        child: Image.network(image8),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      FlatButton(
-                        child: Image.network(image9),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      FlatButton(
-                        child: Image.network(image10),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-
-                Container(
-                  margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                  height: 170,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Image.network(image11),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      // Image.network(image1),
-                      FlatButton(
-                        child: Image.network(image12),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      FlatButton(
-                        child: Image.network(image13),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      FlatButton(
-                        child: Image.network(image14),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
-                      FlatButton(
-                        child: Image.network(image15),
-                        onPressed: () {
-                          bookcaseDialog(context).then((onValue) {});
-                        },
-                      ),
                     ],
                   ),
                 ),
