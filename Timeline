@@ -4,11 +4,10 @@ import 'package:Bookhub/drawertile.dart';
 import 'package:Bookhub/login.dart';
 import 'package:Bookhub/cadastrolivros.dart';
 import 'package:Bookhub/estante.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:core';
 import 'package:Bookhub/api.dart';
-import 'package:Bookhub/models/usuario.dart';
+import 'package:Bookhub/loja.dart';
 import 'package:Bookhub/topicos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -113,7 +112,7 @@ class _HomeState extends State<Home> {
   GestureDetector myTopic (Color color, String titulo) {
     return new GestureDetector(
       onTap: () {
-        print("LAIS OBRIGADO POR TUDO TE AMOOOO");
+       
       },
       child: Container(
         color: color,
@@ -148,7 +147,9 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: () {print("elas que lutem");},
+            onPressed: () {
+              initState();
+            },
           ),
         ],
       ),
@@ -170,9 +171,23 @@ class _HomeState extends State<Home> {
                           alignment: Alignment.center,
                           child: Column(
                             children: <Widget>[
-                              Material(
-                                borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                                child: Image.network("", width: 120.0, height: 120.0,),
+                              Container(
+                                width:120,
+                                height:120,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  boxShadow: [BoxShadow(
+                                    color: Color(0xff2A236E),
+                                    blurRadius: 20,
+                                    offset: Offset(0, 0),
+                                  ),
+                                  ],
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage (avatar(_idAvatar)),
+                                  ),
+                                ),
 
                               )
                             ],
@@ -224,7 +239,7 @@ class _HomeState extends State<Home> {
             iconBottom(Icons.person, TelaPerfil()),
             iconBottom(Icons.bookmark_border, Estante()),
             iconBottom(Icons.menu, Home()),
-            iconBottom(Icons.location_on, LoginScreen()),
+            iconBottom(Icons.location_on, Loja()),
             iconBottom(Icons.toc, Topicos()),
 
           ],
@@ -242,21 +257,55 @@ class _HomeState extends State<Home> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQJWz7PeZmcNQp_svDznslTjfal2Oksb2j4VFwv3lzMw8WBWt3E", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTluY_u--YSm9Yi5k10bdzdoL0nKKcpC8Nxvs7T9rH2mfz8b_-v", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1bKS_TTRyr8UryRNVN4OBQRdYkIQSwoPlDsPy8RysIRFX5w-B", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWXpbiJWEeEGPuiqRuviFxjFJPrDB8UkmXsKHDsg_ATnh1rC4o", "Teste1", "Teste2"),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQkTQNBFPFC1e7qcXBgXXT-n4ToahKMj4I20I44AfbBAYgktzA", "Teste1", "Teste2"),
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQJWz7PeZmcNQp_svDznslTjfal2Oksb2j4VFwv3lzMw8WBWt3E", "Quem é você Alasca?", "Livro irá se tornar série."),
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTluY_u--YSm9Yi5k10bdzdoL0nKKcpC8Nxvs7T9rH2mfz8b_-v", "Jojo Moyes irá postar novo livro!", ""),
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1bKS_TTRyr8UryRNVN4OBQRdYkIQSwoPlDsPy8RysIRFX5w-B", "Turma da Mônica Jovem virará série no CN.", ""),
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWXpbiJWEeEGPuiqRuviFxjFJPrDB8UkmXsKHDsg_ATnh1rC4o", "As pessoas estão comprando o Kindle?", ""),
+                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQkTQNBFPFC1e7qcXBgXXT-n4ToahKMj4I20I44AfbBAYgktzA", "Por onde andam as livrarias?", "O sumiço de livrarias aumenta."),
       ],
                     ),
                   ),
 
                               Text("Tópicos", textAlign: TextAlign.center,),
                               Divider(),
-                              myTopic(Colors.blue, "Qual o segredo da bíblia?"),
-      myTopic(Color(0xff2A236E), "Quando sai a sequência de Game of Thrones?"),
-      myTopic(Colors.blue, "Netflix comprará Percy Jackson?"),
-      myTopic(Color(0xff2A236E), "SPOILER ALERT: Esse personagem vive ou morre?"),
+      Container(
+        height: 300,
+        width: 200,
+        child:
+      FutureBuilder(
+          future: ApiService.getPostList(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              final posts = snapshot.data;
+              return ListView.separated(
+                separatorBuilder: (context, index) {
+                  return Divider(height: 2, color: Colors.black,);
+                },
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(
+                      posts[index]['titulo'],
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text('Postado por @${posts[index]['login']}'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Posts(posts[index]['id']),
+                          )
+                      );
+                    },
+                  );
+                },
+                itemCount: 4,
+              );
+            }
+            return Center(child: CircularProgressIndicator(),);
+          }
+      ),
+      ),
       FlatButton(
         color: Color(0xff2A236E),
         textColor: Colors.white,
@@ -265,7 +314,12 @@ class _HomeState extends State<Home> {
         padding: EdgeInsets.all(8.0),
         splashColor: Colors.blueAccent,
         onPressed: () {
-          /*...*/
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+              builder: (context) => Topicos()
+          ),
+          );
         },
         child: Text("Veja mais"),
       ),
@@ -293,7 +347,7 @@ class _HomeState extends State<Home> {
     borderSide: BorderSide(color: Colors.blue),
     shape: StadiumBorder(),
     ),
-                              ],
+              ],
       ),
       Row(
         children: <Widget>[
@@ -302,7 +356,7 @@ class _HomeState extends State<Home> {
         textAlign: TextAlign.center,
           decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: "Escreva o nome do livro"
+              hintText: "ALERTA! Loja ainda em manutenção."
           ),
       ),
     ),
