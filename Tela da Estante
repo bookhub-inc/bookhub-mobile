@@ -66,25 +66,22 @@ class _EstanteState extends State<Estante> {
 
   @override
 
-
-
-
-  String image1 = "https://a-static.mlcdn.com.br/1500x1500/livro-textos-crueis-demais-para-serem-lidos-rapidamente/magazineluiza/223242600/9e42c83227ba53a8da94ad9d59a1e3cc.jpg";
-  String image2 = "https://a-static.mlcdn.com.br/618x463/livro-extraordinario/magazineluiza/089589200/c2f32d38-cacd-4308-8f6e-baf9c0f8e856.jpg";
-  String image3 = "https://a-static.mlcdn.com.br/618x463/livro-harry-potter-e-a-camara-secreta/magazineluiza/089060800/1ccda8e6e7f7e675d1c1260cedcce80e.jpg";
-  String image4 = "https://a-static.mlcdn.com.br/618x463/livro-tempestade-de-guerra/magazineluiza/222847800/b4430eccb5654c29ab57145d9d74b4e3.jpg";
-  String image5 = "https://a-static.mlcdn.com.br/618x463/livro-diario-de-uma-garota-nada-popular-2/magazineluiza/088691000/5adfca8c-c6b3-4a52-a155-8718cca94bd0.jpg";
-  String image6 = "https://a-static.mlcdn.com.br/1500x1500/livro-o-navio-dos-mortos/magazineluiza/222764100/4f84c17d-9684-453a-83c5-6a2083696302.jpg";
-  String image7 = "https://a-static.mlcdn.com.br/618x463/cronicas-de-gelo-e-fogo-as-v-2-a-furia-dos-reis-edicao-leya-casa-da-palavra/livrariacultura/46055843/358d0a7eaced9af710a049ea2fa65148.jpg";
-  String image8 = "https://a-static.mlcdn.com.br/618x463/livro-mundo-em-caos-volume-1/magazineluiza/224149000/60ba1458825562a7c680bc9b8d67b44f.jpg";
-  String image9 = "https://a-static.mlcdn.com.br/618x463/livro-13-dias-de-meia-noite/magazineluiza/223256800/673e1f78f57afa8aa041cf82240536f8.jpg";
-  String image10 = "https://a-static.mlcdn.com.br/618x463/livro-a-senhora-do-lago-the-witcher-a-saga-do-bruxo-geralt-de-rivia/magazineluiza/223117900/d8033975f494c5884ed7cb6dd5561ba4.jpg";
-  String image11 = "https://images-na.ssl-images-amazon.com/images/I/51w7NmcUDqL.jpg";
-  String image12 = "https://a-static.mlcdn.com.br/618x463/livro-as-cronicas-de-narnia-volume-unico/saraiva/2623167/38e95d28444a69ec5e64a1ce45ab996c.jpg";
-  String image13 = "https://images-na.ssl-images-amazon.com/images/I/51mcGemiiWL._SX339_BO1,204,203,200_.jpg";
-  String image14 = "https://images-na.ssl-images-amazon.com/images/I/51qnw4-mQLL._SX328_BO1,204,203,200_.jpg";
-  String image15 = "https://images-na.ssl-images-amazon.com/images/I/41%2BH%2BynXnRL._SX380_BO1,204,203,200_.jpg";
-
+  Container myBook( String imageVal, String heading){
+    return Container(
+      width: 160.0,
+      child: Card(
+        child: Wrap(
+          children: <Widget>[
+            Image.network(imageVal),
+            ListTile(
+              title: Text(heading
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget build(BuildContext context) {
     @override
@@ -254,33 +251,27 @@ class _EstanteState extends State<Estante> {
             final books = snapshot.data;
             return ListView.separated(
                 separatorBuilder: (context, index) => Divider(
-                  height: 2,
                   color: Colors.black,
                 ),
                 itemBuilder: (context, index) {
-                  return Container(
-                      margin: EdgeInsets.symmetric(vertical: 20.0),
-                  height: 250,
-                  child: Column(
-                    children: <Widget>[
-                  Padding(
-                  padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
-                  child:
-                      ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          FlatButton(
-                  child:
-                          Image.network("${books[index]['url']}", width: 150.0, height: 100.0,),
-                            onPressed: (){},
-                          ),
-                        ],
-                      ),
+                  return SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget> [
+                    Container(
+                    margin: EdgeInsets.symmetric(vertical: 20.0),
+                    height: 180,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: <Widget>[
+                        myBook("${books[index]['url']}", "${books[index]['nome']}"),
+                      ],
+                    ),
                   ),
-                    ],
+                  ],
                   ),
                   );
-
                 },
                 itemCount: books.length,
               );
@@ -329,6 +320,3 @@ Future <List<Livro>> getlivro(String search) async {
 
   Livro livro = Livro.fromJson(jsonData);
   }
-
-
-
