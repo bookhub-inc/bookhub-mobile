@@ -12,7 +12,7 @@ class _NewPostState extends State<NewPost>{
   String _nome = "";
   String _sobrenome = "";
   String _user = "";
-  int _idUser;
+  int _id;
   int _idAvatar;
 
   Future<String> getNamePreference() async{
@@ -62,7 +62,7 @@ class _NewPostState extends State<NewPost>{
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: AppBar(title: Text("Novo Tópico")),
+        appBar: AppBar(title: Text("Novo Tópico"), backgroundColor: Color(0xff2A236E),),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -81,6 +81,7 @@ class _NewPostState extends State<NewPost>{
                 children: <Widget>[
                   Text("Spoiler?"),
               Checkbox(
+                activeColor: Color(0xff2A236E),
                 onChanged: (bool spoiler){
 setState(() {
    _isChecked = spoiler;
@@ -95,14 +96,14 @@ setState(() {
                   height: 50,
                   width: double.infinity,
                   child: RaisedButton(
-                    color: Colors.blue,
+                    color: Color(0xff2A236E),
                     child: Text("Submit",style: TextStyle(color: Colors.white)),
                     onPressed: (){
                       if  (_titleController.text.isEmpty || _bodyController.text.isEmpty){
                         showDialog(
                             builder: (context) => AlertDialog(
-                              title: Text("Failure"),
-                              content: Text("You need to input the title and the body of the post"),
+                              title: Text("Erro"),
+                              content: Text("Preencha todos os campos corretamente."),
                               actions: <Widget>[FlatButton(
                                 onPressed: (){Navigator.pop(context);},
                                 child: Text("Ok"),
@@ -111,45 +112,39 @@ setState(() {
                             context: context
                         );
                         return;
-                      }
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      ApiService.addPost(_titleController.text, _bodyController.text, _isChecked, _idUser).then((sucess){
+                      } else {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        ApiService.addPost(_titleController.text, _bodyController.text, _id);
                         setState(() {
                           _isLoading = false;
                         });
-                        String title, text;
-                        if(sucess){
-                          title = "Sucess";
-                          text = "Your post has been successful submitted";
-                        }else{
-                          title = "Error";
-                          text = "An error occurred while submitting your post";
-                        }
                         showDialog(
-                            builder: (context) => AlertDialog(
-                              title: Text(title),
-                              content: Text(text),
-                              actions: <Widget>[
-                                FlatButton(
-                                  onPressed: (){
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Ok"),
-                                )
-                              ],
-                            ),
+                            builder: (context) =>
+                                AlertDialog(
+                                  title: Text("Tópico registrado com sucesso."),
+                                  content: Text(
+                                      "Seu tópico poderá ser visto pelos outros usuários."),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Ok"),
+                                    )
+                                  ],
+                                ),
                             context: context
                         );
-                      });
-                    },
-                  )
+                      }
+                    }
+                    ),
+              ),
+          ],
+                  ),
               )
-            ],
-          ),
-        )
-    );
+          );
   }
   void updateName(String nome){
 
@@ -173,7 +168,7 @@ setState(() {
   void updateId(int id){
 
     setState((){
-      this._idUser = id;
+      this._id = id;
     });
   }
 
