@@ -94,7 +94,7 @@ class ApiService {
   static Future<List<Livro>> getBooks(String query) async {
     var livros = List<Livro>();
     // Get user posts for id
-    var response = await http.get('${Urls.BASE_API_URL}/usuario/livro?nome=$query');
+    var response = await http.get('${Urls.BASE_API_URL}/livro?nome=$query');
 
     // parse into List
     var parsed = json.decode(response.body) as List<dynamic>;
