@@ -512,12 +512,6 @@ class _PostsState extends State<Posts> {
                                   height:60,
                                   decoration: BoxDecoration(
                                     color: Colors.blue,
-                                    boxShadow: [BoxShadow(
-                                      color: Color(0xff2A236E),
-                                      blurRadius: 20,
-                                      offset: Offset(0, 0),
-                                    ),
-                                    ],
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
@@ -529,13 +523,20 @@ class _PostsState extends State<Posts> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              snapshot.data['titulo'],
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                                Expanded(
+                                    child:
+                                    Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child:
+                                        Text(
+                                          snapshot.data['titulo'],
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                    )
+                                ),
                               ],
                     ),
                             SizedBox(
