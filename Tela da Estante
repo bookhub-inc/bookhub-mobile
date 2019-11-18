@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:Bookhub/api.dart';
 import 'package:Bookhub/login.dart';
+import 'package:Bookhub/models/livros.dart';
 import 'package:Bookhub/tela_perfil.dart';
 import 'package:Bookhub/topicos.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +11,7 @@ import 'package:Bookhub/cadastrolivros.dart';
 import 'package:Bookhub/main.dart';
 import 'package:Bookhub/data_search.dart';
 import 'package:Bookhub/drawertile.dart';
+import 'package:http/http.dart' as http;
 
 class Estante extends StatefulWidget {
   @override
@@ -254,26 +258,31 @@ class _EstanteState extends State<Estante> {
                   color: Colors.black,
                 ),
                 itemBuilder: (context, index) {
-                  return Column(
+                  return Container(
+                      margin: EdgeInsets.symmetric(vertical: 20.0),
+                  height: 250,
+                  child: Column(
                     children: <Widget>[
-Padding(
-                  padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+                  Padding(
+                  padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
                   child:
                       ListView(
+                        scrollDirection: Axis.horizontal,
                         children: <Widget>[
                           FlatButton(
                   child:
-                          Image.network("${List}", width: 150.0, height: 100.0,),
+                          Image.network("${books[index]['url']}", width: 150.0, height: 100.0,),
                             onPressed: (){},
                           ),
                         ],
                       ),
                   ),
                     ],
+                  ),
                   );
 
                 },
-                itemCount: 10,
+                itemCount: books.length,
               );
                   }
           return Center(
@@ -312,4 +321,14 @@ Padding(
     });
   }
 }
+
+Future <List<Livro>> getlivro(String search) async {
+  var data = await http.get(
+      "http://ec2-54-233-230-135.sa-east-1.compute.amazonaws.com:8080/livro?nome=$search");
+  var jsonData = json.decode(data.body);
+
+  Livro livro = Livro.fromJson(jsonData);
+  }
+
+
 
