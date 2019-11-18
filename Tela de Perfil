@@ -5,7 +5,7 @@ import "package:Bookhub/login.dart";
 import 'package:Bookhub/estante.dart';
 import 'package:Bookhub/topicos.dart';
 import 'package:Bookhub/main.dart';
-import 'package:Bookhub/models/usuario.dart';
+import 'package:Bookhub/loja.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -120,7 +120,9 @@ class _TelaPerfilState extends State<TelaPerfil> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: () {print("");},
+            onPressed: () {
+              initState();
+            },
           ),
         ],
       ),
@@ -213,7 +215,7 @@ class _TelaPerfilState extends State<TelaPerfil> {
             iconBottom(Icons.person, TelaPerfil()),
             iconBottom(Icons.bookmark_border, Estante()),
             iconBottom(Icons.menu, Home()),
-            iconBottom(Icons.location_on, LoginScreen()),
+            iconBottom(Icons.location_on, Loja()),
             iconBottom(Icons.toc, Topicos()),
           ],
         ),
