@@ -1,12 +1,13 @@
-import 'package:bookhub/topicos.dart';
+import 'package:Bookhub/api.dart';
+import 'package:Bookhub/login.dart';
+import 'package:Bookhub/tela_perfil.dart';
+import 'package:Bookhub/topicos.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'DrawerTile.dart';
-import 'LoginScreen.dart';
-import 'TelaPerfil.dart';
-import 'TeladeCadastrodeLivros.dart';
-import 'main.dart';
-import 'models/data_search.dart';
+import 'package:Bookhub/cadastrolivros.dart';
+import 'package:Bookhub/main.dart';
+import 'package:Bookhub/data_search.dart';
+import 'package:Bookhub/drawertile.dart';
 
 class Estante extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _EstanteState extends State<Estante> {
   String _sobrenome = "";
   String _user = "";
   int _idAvatar;
+  int _id;
 
   @override
   Future<String> getNamePreference() async {
@@ -43,11 +45,18 @@ class _EstanteState extends State<Estante> {
     return idAvatar;
   }
 
+  Future<int> getIdPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt("id");
+    return id;
+  }
+
   void initState() {
     getNamePreference().then(updateName);
     getSobrenomePreference().then(updateSobrenome);
     getUserPreference().then(updateUser);
     getIdAvatarPreference().then(updateAvatar);
+    getIdPreference().then(updateId);
     super.initState();
   }
 
@@ -125,7 +134,7 @@ class _EstanteState extends State<Estante> {
             icon: Icon(Icons.add_circle),
             iconSize: 35,
             onPressed: () {
-              showSearch(context: context, delegate: DataSearch());
+              showSearch(context: context, delegate: DataSearch(_id));
             },
           ),
         ],
@@ -234,25 +243,48 @@ class _EstanteState extends State<Estante> {
       body: Stack(
         children: <Widget>[
           _buildBodyBack(),
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                  height: 170,
-                  child: ListView(
-                    children: <Widget>[
-
-                    ],
-                  ),
+          FutureBuilder(
+            future: ApiService.getEstante(_id),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final books = snapshot.data;
+            return ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  height: 2,
+                  color: Colors.black,
                 ),
-              ],
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: <Widget>[
+Padding(
+                  padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+                  child:
+                      ListView(
+                        children: <Widget>[
+                          FlatButton(
+                  child:
+                          Image.network("${List}", width: 150.0, height: 100.0,),
+                            onPressed: (){},
+                          ),
+                        ],
+                      ),
+                  ),
+                    ],
+                  );
+
+                },
+                itemCount: 10,
+              );
+                  }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
+    }
   void updateName(String nome) {
     setState(() {
       this._nome = nome;
@@ -274,4 +306,10 @@ class _EstanteState extends State<Estante> {
       this._idAvatar = idAvatar;
     });
   }
+  void updateId(int id) {
+    setState(() {
+      this._id = id;
+    });
+  }
 }
+
