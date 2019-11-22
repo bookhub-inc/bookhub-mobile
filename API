@@ -54,6 +54,20 @@ class ApiService {
     }
   }
 
+  static Future<dynamic> _delete(String url) async {
+    try {
+      final response = await http.delete(url);
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+
+      } else {
+        return null;
+      }
+    } catch (ex) {
+      throw Exception ("Login invalido");
+    }
+  }
+
   static Future<List<dynamic>> getUser(int userId) async {
     return await _get('${Urls.BASE_API_URL}/usuario/$userId');
   }
@@ -72,6 +86,9 @@ class ApiService {
 
   static Future<List<dynamic>> getEstante(int postId) async {
     return await _get('${Urls.BASE_API_URL}/usuario/estante/$postId');
+  }
+  static Future<List<dynamic>> deleteEstante(int postId) async {
+    return await _delete('${Urls.BASE_API_URL}/usuario/estante/$postId');
   }
 
   static Future<dynamic> getCommentsForPost(int postId) async {
