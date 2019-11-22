@@ -9,7 +9,7 @@ class Livro {
   final int npaginas;
 
   Livro({this.id, this.nome, this.autor, this.editora, this.descricao, this.url,
-      this.categorias, this.npaginas});
+    this.categorias, this.npaginas});
 
   factory Livro.fromJson(Map<String, dynamic> parsedJson) {
     Map json = parsedJson;
