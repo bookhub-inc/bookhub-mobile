@@ -255,22 +255,55 @@ class _EstanteState extends State<Estante> {
                 ),
                 itemBuilder: (context, index) {
                   return SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget> [
-                    Container(
-                    margin: EdgeInsets.symmetric(vertical: 20.0),
-                    height: 180,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: <Widget>[
-                        myBook("${books[index]['url']}", "${books[index]['nome']}"),
-                      ],
-                    ),
-                  ),
-                  ],
-                  ),
+                    child: Card(
+                           elevation: 5,
+                           child: Container(
+                             height: 100,
+                             child: Row(
+                               children: <Widget>[
+                                 Container(
+                                   height: 120,
+                                   width: 70,
+                                   decoration: BoxDecoration(
+                                       borderRadius: BorderRadius.only(
+                                         bottomLeft: Radius.circular(5),
+                                         topLeft: Radius.circular(5),
+                                       ),
+                                       image: DecorationImage(
+                                           fit: BoxFit.cover,
+                                           image: NetworkImage("${books[index]['url']}")
+                                       )
+                                   ),
+                                 ),
+                                 Expanded(
+                                   child:
+                                       SingleChildScrollView(
+                                         child:
+                                 Column(
+                                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                               mainAxisAlignment: MainAxisAlignment.start,
+                               children: <Widget>[
+                                 Text("Nome do Livro: ${books[index]['nome']}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                 Text("Autor: ${books[index]['autor']}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                 Text("Numero de Páginas: ${books[index]['npaginas']}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                 Text("Nota: ${books[index]['nota']}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                 FlatButton(
+                                     child: Text("Deletar Livro"),
+                  onPressed: (){
+                                       int idTopico = books[index]['id'];
+ApiService.deleteEstante(idTopico);
+initState();
+                  },
+                                 ),
+                               ],
+                           )
+                                       ),
+                           ),
+                               ],
+                             ),
+                           ),
+
+                         ),
                   );
                 },
                 itemCount: books.length,
@@ -320,3 +353,6 @@ Future <List<Livro>> getlivro(String search) async {
 
   Livro livro = Livro.fromJson(jsonData);
   }
+
+
+
