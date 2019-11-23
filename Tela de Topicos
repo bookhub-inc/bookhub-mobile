@@ -1,15 +1,14 @@
-import 'package:Bookhub/api.dart';
+import 'package:bookhub/API.dart';
+import 'package:bookhub/DrawerTile.dart';
+import 'package:bookhub/TelaCadastroLivros.dart';
+import 'package:bookhub/TelaCriarTopico.dart';
+import 'package:bookhub/TeladaEstante.dart';
+import 'package:bookhub/TeladeLogin.dart';
+import 'package:bookhub/TeladePerfil.dart';
+import 'package:bookhub/TeladeRecomandacao.dart';
+import 'package:bookhub/main.dart';
 import 'package:flutter/material.dart';
-import 'package:Bookhub/newPost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import "package:Bookhub/cadastrolivros.dart";
-import "package:Bookhub/drawertile.dart";
-import "package:Bookhub/login.dart";
-import 'package:Bookhub/estante.dart';
-import 'package:Bookhub/tela_perfil.dart';
-import 'package:Bookhub/main.dart';
-import 'package:Bookhub/loja.dart';
-import 'package:Bookhub/models/usuario.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -102,10 +101,10 @@ class _TopicosState extends State<Topicos> {
     }
 
     _buildDrawerBack() => Container(
-          //criando uma função e dando o nome de build Drawer Back
-          decoration: BoxDecoration(
-              //dentro de um container eu defino um boxdecoration
-              gradient: LinearGradient(
+      //criando uma função e dando o nome de build Drawer Back
+      decoration: BoxDecoration(
+        //dentro de um container eu defino um boxdecoration
+          gradient: LinearGradient(
             //em seguida um gradiente linear
             colors: [
               Color(0xff2A236E),
@@ -114,7 +113,7 @@ class _TopicosState extends State<Topicos> {
             begin: Alignment.topLeft, //definindo onde começa
             end: Alignment.bottomRight, //definindo onde termina
           )),
-        );
+    );
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff2A236E),
@@ -222,14 +221,10 @@ class _TopicosState extends State<Topicos> {
                     //defindo margem
                     child: Column(
                       children: <Widget>[
-                        DrawerTile(
-                            Icons.book, "Cadastro de Livros", CadastroLivros()),
-                        DrawerTile(Icons.chat, "Chat", LoginScreen()),
-                        //defindo os icones ddo drawer
-                        DrawerTile(
-                            Icons.settings, "Configuração", LoginScreen()),
+                        DrawerTile(Icons.book, "Cadastro de Livros", CadastroLivros()),
+                        DrawerTile(Icons.star, "Recomendações", Recomendacao()),
                         DrawerTile(Icons.help, "Ajuda", LoginScreen()),
-                        DrawerExit(Icons.exit_to_app, "Sair", 1),
+                        DrawerExit(Icons.exit_to_app, "Sair",3),
                       ],
                     )),
               ],
@@ -244,9 +239,8 @@ class _TopicosState extends State<Topicos> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             iconBottom(Icons.person, TelaPerfil()),
-            iconBottom(Icons.bookmark_border, Estante()),
+            iconBottom(Icons.local_library, Estante()),
             iconBottom(Icons.menu, Home()),
-            iconBottom(Icons.location_on, Loja()),
             iconBottom(Icons.toc, Topicos()),
           ],
         ),
@@ -478,7 +472,7 @@ class _PostsState extends State<Posts> {
                                       );
                                     };
                                   }
-                                  ),
+                              ),
                             ],
                           )
                         ],
@@ -494,9 +488,9 @@ class _PostsState extends State<Posts> {
         children: <Widget>[
           SingleChildScrollView(
             child:
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: FutureBuilder(
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: FutureBuilder(
                   future: ApiService.getPost(_id),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
@@ -520,9 +514,9 @@ class _PostsState extends State<Posts> {
                                   ),
 
                                 ),
-                            SizedBox(
-                              height: 10,
-                            ),
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Expanded(
                                     child:
                                     Padding(
@@ -538,7 +532,7 @@ class _PostsState extends State<Posts> {
                                     )
                                 ),
                               ],
-                    ),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
@@ -554,9 +548,9 @@ class _PostsState extends State<Posts> {
                             OutlineButton(
                               onPressed: () {
                                 TextEditingController tituloController =
-                                    TextEditingController();
+                                TextEditingController();
                                 TextEditingController descricaoController =
-                                    TextEditingController();
+                                TextEditingController();
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -574,7 +568,7 @@ class _PostsState extends State<Posts> {
                                                 decoration: InputDecoration(
                                                   border: InputBorder.none,
                                                   hintText:
-                                                      "${snapshot.data['titulo']}",
+                                                  "${snapshot.data['titulo']}",
                                                   hintMaxLines: 4,
                                                 ),
                                               ),
@@ -586,11 +580,11 @@ class _PostsState extends State<Posts> {
                                                 height: 200.0,
                                                 child: TextField(
                                                   controller:
-                                                      descricaoController,
+                                                  descricaoController,
                                                   decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText:
-                                                        "${snapshot.data['descricao']}",
+                                                    "${snapshot.data['descricao']}",
                                                     hintMaxLines: 20,
                                                   ),
                                                 ),
@@ -614,15 +608,15 @@ class _PostsState extends State<Posts> {
                                                   if (tituloController
                                                       .text.isEmpty) {
                                                     tituloController.text =
-                                                        snapshot.data['titulo'];
+                                                    snapshot.data['titulo'];
                                                   } else if (descricaoController
                                                       .text.isEmpty) {
                                                     descricaoController.text =
-                                                        snapshot
-                                                            .data['descricao'];
+                                                    snapshot
+                                                        .data['descricao'];
                                                   }
                                                   if (tituloController
-                                                          .text.isNotEmpty &&
+                                                      .text.isNotEmpty &&
                                                       descricaoController
                                                           .text.isNotEmpty) {
                                                     ApiService.alterPost(
@@ -650,57 +644,57 @@ class _PostsState extends State<Posts> {
                         );
                       } else {
                         return SingleChildScrollView(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  width:60,
-                                  height:60,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage (avatar(_idAvatar)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    width:60,
+                                    height:60,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage (avatar(_idAvatar)),
+                                      ),
                                     ),
-                                  ),
 
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Expanded(
-                                  child:
-                                      Padding(
-                                        padding: EdgeInsets.all(10),
-                                child:
-                                Text(
-                                  snapshot.data['titulo'],
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
                                   ),
-                                )
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Expanded(
+                                      child:
+                                      Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child:
+                                          Text(
+                                            snapshot.data['titulo'],
+                                            style: TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
                                       )
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(snapshot.data['descricao'],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                )),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                                'Tópico postado por usuário: @${snapshot.data['login']} ás ${snapshot.data['dataCriacao']}'),
-                          ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(snapshot.data['descricao'],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  )),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                  'Tópico postado por usuário: @${snapshot.data['login']} ás ${snapshot.data['dataCriacao']}'),
+                            ],
+                          ),
                         );
                       }
                     }
@@ -721,67 +715,67 @@ class _PostsState extends State<Posts> {
             height: 20,
             child: Text("Comentários"),
           ),
-    FutureBuilder(
-    future: ApiService.getCommentsForPost(_id),
-    builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.done) {
-    final comments = snapshot.data;
-    return Expanded(
-    child: ListView.separated(
-    separatorBuilder: (context, index) => Divider(
-    height: 2,
-    color: Colors.black,
-    ),
-    itemBuilder: (context, index) {
-    return Column(
-    children: <Widget>[
-    ListTile(
-    title: Text(
-    '@${comments[index]['login']}',
-    style: TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.bold),
-    ),
-    subtitle: Text(comments[index]['comentario'], style: TextStyle(fontSize: 15, color: Colors.black)),
-    leading: Container(
-      width:60,
-      height:60,
-      decoration: BoxDecoration(
-      color: Colors.blue,
-      boxShadow: [BoxShadow(
-      color: Color(0xff2A236E),
-      blurRadius: 20,
-      offset: Offset(0, 0),
-      ),
-      ],
-      shape: BoxShape.circle,
-      image: DecorationImage(
-      fit: BoxFit.cover,
-      image: NetworkImage (avatar(_idAvatar)),
-      ),
-      ),
+          FutureBuilder(
+            future: ApiService.getCommentsForPost(_id),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                final comments = snapshot.data;
+                return Expanded(
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => Divider(
+                      height: 2,
+                      color: Colors.black,
+                    ),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: <Widget>[
+                          ListTile(
+                            title: Text(
+                              '@${comments[index]['login']}',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(comments[index]['comentario'], style: TextStyle(fontSize: 15, color: Colors.black)),
+                            leading: Container(
+                              width:60,
+                              height:60,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                boxShadow: [BoxShadow(
+                                  color: Color(0xff2A236E),
+                                  blurRadius: 20,
+                                  offset: Offset(0, 0),
+                                ),
+                                ],
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage (avatar(_idAvatar)),
+                                ),
+                              ),
 
-      ),
-    onLongPress: (){
+                            ),
+                            onLongPress: (){
 
-    },
-    ),
-    Text(
-    "Comentário postado ás ${comments[index]['dataComentario']}"),
-    ],
-    );
+                            },
+                          ),
+                          Text(
+                              "Comentário postado ás ${comments[index]['dataComentario']}"),
+                        ],
+                      );
 
-    },
-    itemCount: comments.length,
-    ),
-    );
-    }
-    return Center(
-    child: CircularProgressIndicator(),
-    );
-    },
-    ),
-    ],
+                    },
+                    itemCount: comments.length,
+                  ),
+                );
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
