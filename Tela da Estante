@@ -4,6 +4,7 @@ import 'package:bookhub/DrawerTile.dart';
 import 'package:bookhub/TelaCadastroLivros.dart';
 import 'package:bookhub/TeladeLogin.dart';
 import 'package:bookhub/TeladePerfil.dart';
+import 'package:bookhub/TeladeRecomandacao.dart';
 import 'package:bookhub/TeladeTopicos.dart';
 import 'package:bookhub/main.dart';
 import 'package:bookhub/models/DataSearch.dart';
@@ -210,8 +211,9 @@ class _EstanteState extends State<Estante> {
                     child: Column(
                       children: <Widget>[
                         DrawerTile(Icons.book, "Cadastro de Livros", CadastroLivros()),
+                        DrawerTile(Icons.star, "Recomendações", Recomendacao()),
                         DrawerTile(Icons.help, "Ajuda", LoginScreen()),
-                        DrawerExit(Icons.exit_to_app, "Sair", 3),
+                        DrawerExit(Icons.exit_to_app, "Sair",3),
                       ],
                     )
                 ),
@@ -227,7 +229,7 @@ class _EstanteState extends State<Estante> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             iconBottom(Icons.person, TelaPerfil()),
-            iconBottom(Icons.bookmark_border, Estante()),
+            iconBottom(Icons.local_library, Estante()),
             iconBottom(Icons.menu, Home()),
             iconBottom(Icons.toc, Topicos()),
           ],
@@ -237,6 +239,11 @@ class _EstanteState extends State<Estante> {
       body: Stack(
         children: <Widget>[
           _buildBodyBack(),
+          ListView(
+            children: <Widget>[
+
+            ],
+          ),
           FutureBuilder(
             future: ApiService.getEstante(_id),
             builder: (context, snapshot) {
@@ -302,13 +309,16 @@ class _EstanteState extends State<Estante> {
                   itemCount: books.length,
                 );
               }
+
               return Center(
                 child: CircularProgressIndicator(),
               );
             },
+
           ),
-        ],
-      ),
+
+ ]
+      )
     );
   }
   void updateName(String nome) {
