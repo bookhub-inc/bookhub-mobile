@@ -1,14 +1,14 @@
+import 'package:bookhub/API.dart';
+import 'package:bookhub/DrawerTile.dart';
+import 'package:bookhub/TelaCadastroLivros.dart';
+import 'package:bookhub/TeladaEstante.dart';
+import 'package:bookhub/TeladeLogin.dart';
+import 'package:bookhub/TeladePerfil.dart';
+import 'package:bookhub/TeladeRecomandacao.dart';
+import 'package:bookhub/TeladeTopicos.dart';
 import "package:flutter/material.dart";
-import 'package:Bookhub/tela_perfil.dart';
-import 'package:Bookhub/drawertile.dart';
-import 'package:Bookhub/login.dart';
-import 'package:Bookhub/cadastrolivros.dart';
-import 'package:Bookhub/estante.dart';
 import 'dart:async';
 import 'dart:core';
-import 'package:Bookhub/api.dart';
-import 'package:Bookhub/loja.dart';
-import 'package:Bookhub/topicos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -105,14 +105,14 @@ class _HomeState extends State<Home> {
     return IconButton(
       icon: Icon(simbolo),
       color: Colors.white,
-    onPressed: () {Navigator.of(context).popUntil((route) => route.settings.name == page);
+      onPressed: () {Navigator.of(context).popUntil((route) => route.settings.name == page);
       },
     );
   }
   GestureDetector myTopic (Color color, String titulo) {
     return new GestureDetector(
       onTap: () {
-       
+
       },
       child: Container(
         color: color,
@@ -217,10 +217,9 @@ class _HomeState extends State<Home> {
                     child: Column(
                       children: <Widget>[
                         DrawerTile(Icons.book, "Cadastro de Livros", CadastroLivros()),
-                        DrawerTile(Icons.chat, "Chat", LoginScreen()),//defindo os icones ddo drawer
-                        DrawerTile(Icons.settings, "Configuração", LoginScreen()),
+                        DrawerTile(Icons.star, "Recomendações", Recomendacao()),
                         DrawerTile(Icons.help, "Ajuda", LoginScreen()),
-                        DrawerExit(Icons.exit_to_app, "Sair", 1),
+                        DrawerExit(Icons.exit_to_app, "Sair",1),
                       ],
                     )
                 ),
@@ -237,9 +236,8 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             iconBottom(Icons.person, TelaPerfil()),
-            iconBottom(Icons.bookmark_border, Estante()),
+            iconBottom(Icons.local_library, Estante()),
             iconBottom(Icons.menu, Home()),
-            iconBottom(Icons.location_on, Loja()),
             iconBottom(Icons.toc, Topicos()),
 
           ],
@@ -247,128 +245,128 @@ class _HomeState extends State<Home> {
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-   child: Column(
-     crossAxisAlignment: CrossAxisAlignment.stretch,
-     mainAxisSize: MainAxisSize.min,
-    children: <Widget> [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 20.0),
-            height: 250,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget> [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 20.0),
+              height: 250,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQJWz7PeZmcNQp_svDznslTjfal2Oksb2j4VFwv3lzMw8WBWt3E", "Quem é você Alasca?", "Livro irá se tornar série."),
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTluY_u--YSm9Yi5k10bdzdoL0nKKcpC8Nxvs7T9rH2mfz8b_-v", "Jojo Moyes irá postar novo livro!", ""),
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1bKS_TTRyr8UryRNVN4OBQRdYkIQSwoPlDsPy8RysIRFX5w-B", "Turma da Mônica Jovem virará série no CN.", ""),
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWXpbiJWEeEGPuiqRuviFxjFJPrDB8UkmXsKHDsg_ATnh1rC4o", "As pessoas estão comprando o Kindle?", ""),
+                  myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQkTQNBFPFC1e7qcXBgXXT-n4ToahKMj4I20I44AfbBAYgktzA", "Por onde andam as livrarias?", "O sumiço de livrarias aumenta."),
+                ],
+              ),
+            ),
+
+            Text("Tópicos", textAlign: TextAlign.center,),
+            Divider(),
+            Container(
+              height: 300,
+              width: 200,
+              child:
+              FutureBuilder(
+                  future: ApiService.getPostList(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      final posts = snapshot.data;
+                      return ListView.separated(
+                        separatorBuilder: (context, index) {
+                          return Divider(height: 2, color: Colors.black,);
+                        },
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                              posts[index]['titulo'],
+                              style: TextStyle(
+                                  color: Colors.black, fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text('Postado por @${posts[index]['login']}'),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Posts(posts[index]['id']),
+                                  )
+                              );
+                            },
+                          );
+                        },
+                        itemCount: 4,
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator(),);
+                  }
+              ),
+            ),
+            FlatButton(
+              color: Color(0xff2A236E),
+              textColor: Colors.white,
+              disabledColor: Colors.grey,
+              disabledTextColor: Colors.black,
+              padding: EdgeInsets.all(8.0),
+              splashColor: Colors.blueAccent,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Topicos()
+                  ),
+                );
+              },
+              child: Text("Veja mais"),
+            ),
+            Divider(),
+            Text("Loja", textAlign: TextAlign.center,),
+            ButtonBar(
+              mainAxisSize: MainAxisSize.max,
+              alignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQJWz7PeZmcNQp_svDznslTjfal2Oksb2j4VFwv3lzMw8WBWt3E", "Quem é você Alasca?", "Livro irá se tornar série."),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTluY_u--YSm9Yi5k10bdzdoL0nKKcpC8Nxvs7T9rH2mfz8b_-v", "Jojo Moyes irá postar novo livro!", ""),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ1bKS_TTRyr8UryRNVN4OBQRdYkIQSwoPlDsPy8RysIRFX5w-B", "Turma da Mônica Jovem virará série no CN.", ""),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWXpbiJWEeEGPuiqRuviFxjFJPrDB8UkmXsKHDsg_ATnh1rC4o", "As pessoas estão comprando o Kindle?", ""),
-                myNews("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQkTQNBFPFC1e7qcXBgXXT-n4ToahKMj4I20I44AfbBAYgktzA", "Por onde andam as livrarias?", "O sumiço de livrarias aumenta."),
-      ],
+                OutlineButton(
+                  onPressed: () {},
+                  child: Text("Novo"),
+                  borderSide: BorderSide(color: Colors.blue),
+                  shape: StadiumBorder(),
+                ),
+                OutlineButton(
+                  onPressed: () {},
+                  child: Text("Recomendado"),
+                  borderSide: BorderSide(color: Colors.blue),
+                  shape: StadiumBorder(),
+                ),
+                OutlineButton(
+                  onPressed: () {},
+                  child: Text("Menor Preço"),
+                  borderSide: BorderSide(color: Colors.blue),
+                  shape: StadiumBorder(),
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "ALERTA! Loja ainda em manutenção."
                     ),
                   ),
-
-                              Text("Tópicos", textAlign: TextAlign.center,),
-                              Divider(),
-      Container(
-        height: 300,
-        width: 200,
-        child:
-      FutureBuilder(
-          future: ApiService.getPostList(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              final posts = snapshot.data;
-              return ListView.separated(
-                separatorBuilder: (context, index) {
-                  return Divider(height: 2, color: Colors.black,);
-                },
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      posts[index]['titulo'],
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text('Postado por @${posts[index]['login']}'),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Posts(posts[index]['id']),
-                          )
-                      );
-                    },
-                  );
-                },
-                itemCount: 4,
-              );
-            }
-            return Center(child: CircularProgressIndicator(),);
-          }
-      ),
-      ),
-      FlatButton(
-        color: Color(0xff2A236E),
-        textColor: Colors.white,
-        disabledColor: Colors.grey,
-        disabledTextColor: Colors.black,
-        padding: EdgeInsets.all(8.0),
-        splashColor: Colors.blueAccent,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-              builder: (context) => Topicos()
-          ),
-          );
-        },
-        child: Text("Veja mais"),
-      ),
-      Divider(),
-      Text("Loja", textAlign: TextAlign.center,),
-      ButtonBar(
-          mainAxisSize: MainAxisSize.max,
-          alignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-          OutlineButton(
-          onPressed: () {},
-      child: Text("Novo"),
-      borderSide: BorderSide(color: Colors.blue),
-      shape: StadiumBorder(),
-    ),
-    OutlineButton(
-    onPressed: () {},
-    child: Text("Recomendado"),
-    borderSide: BorderSide(color: Colors.blue),
-    shape: StadiumBorder(),
-    ),
-    OutlineButton(
-    onPressed: () {},
-    child: Text("Menor Preço"),
-    borderSide: BorderSide(color: Colors.blue),
-    shape: StadiumBorder(),
-    ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  color: Colors.blue,
+                  onPressed: () {},
+                )
               ],
-      ),
-      Row(
-        children: <Widget>[
-          Expanded(
-      child: TextField(
-        textAlign: TextAlign.center,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "ALERTA! Loja ainda em manutenção."
-          ),
-      ),
-    ),
-          IconButton(
-            icon: Icon(Icons.send),
-            color: Colors.blue,
-            onPressed: () {},
-          )
-    ],
-   ),
-      ],
-    ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -408,5 +406,3 @@ class _HomeState extends State<Home> {
   }
 
 }
-
-
