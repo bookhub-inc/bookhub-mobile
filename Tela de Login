@@ -1,14 +1,14 @@
-import 'package:Bookhub/cadastro.dart';
-import 'package:Bookhub/api.dart';
+import 'package:bookhub/API.dart';
+import 'package:bookhub/TeladeCadastro.dart';
+import 'package:bookhub/models/usuario.dart';
 import 'package:flutter/material.dart';
-import 'package:Bookhub/models/usuario.dart';
 import 'main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginScreen extends StatefulWidget {
-@override
-_LoginScreenState createState() => _LoginScreenState();
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -43,21 +43,21 @@ class _LoginScreenState extends State<LoginScreen> {
         },
       );
     }
-      Future<bool> saveNamePreference(Usuario user) async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString("nome", user.nome);
-        return prefs.commit();
-      }
-      Future<bool> saveUserPreference(Usuario user) async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString("login", user.login);
-        return prefs.commit();
-      }
-      Future<bool> saveIdPreference(Usuario user) async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setInt("id", user.id);
-        return prefs.commit();
-      }
+    Future<bool> saveNamePreference(Usuario user) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("nome", user.nome);
+      return prefs.commit();
+    }
+    Future<bool> saveUserPreference(Usuario user) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("login", user.login);
+      return prefs.commit();
+    }
+    Future<bool> saveIdPreference(Usuario user) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt("id", user.id);
+      return prefs.commit();
+    }
     Future<bool> saveSobrenomePreference(Usuario user) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("sobrenome", user.sobrenome);
@@ -80,20 +80,18 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
 
-      void logadoUser(Usuario nomeUser) {
-        saveNamePreference(nomeUser).then((bool committed) {
-          saveIdPreference(nomeUser).then((bool committed) {
-            saveUserPreference(nomeUser).then((bool committed) {
-              saveSobrenomePreference(nomeUser).then((bool committed) {
-                saveEmailPreference(nomeUser).then((bool committed) {
-                  saveIdAvatarPreference(nomeUser).then((bool committed) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Home()));
-                  }
-                  );
-                  }
-                  );
+    void logadoUser(Usuario nomeUser) {
+      saveNamePreference(nomeUser).then((bool committed) {
+        saveIdPreference(nomeUser).then((bool committed) {
+          saveUserPreference(nomeUser).then((bool committed) {
+            saveSobrenomePreference(nomeUser).then((bool committed) {
+              saveEmailPreference(nomeUser).then((bool committed) {
+                saveIdAvatarPreference(nomeUser).then((bool committed) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()));
+                }
+                );
               }
               );
             }
@@ -103,6 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         );
       }
+      );
+    }
 
     bool _isLoading = false;
     return Scaffold( //função para material basico de design
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 40, //espaçamento entre o texto e imagem
+                    height: 60, //espaçamento entre o texto e imagem
                   ),
                   SizedBox( //criando side box
                     width: 150, //definindo tamnho da imagem dentro do container
@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         "https://i.imgur.com/V2CfTHR.png"), //criando filho com a imagem em si
                   ),
                   SizedBox( //criando outra sized box para dar um espaço entre a imageme o campo de email e senha
-                    height: 10,
+                    height: 40,
                   ),
                   TextFormField( //criando campo
                     controller: usuarioController,
@@ -185,27 +185,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     },
                   ),
-                  Container( //criando container para criação do botão de reset
-                    height: 40,
-                    alignment: Alignment.centerRight,
-                    child: FlatButton(
-                      child: Text(
-                        "Recuperar Senha",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
-                        );
-                      }, //definir para onde vai!!!!
-                    ),
-                  ),
                   SizedBox(
-                    height: 60,
+                    height: 100,
                   ),
                   Container( //container para botão de login
                     height: 60,
