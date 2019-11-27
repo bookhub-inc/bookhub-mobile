@@ -1,6 +1,23 @@
+import 'package:Bookhub/login.dart';
 import 'package:flutter/material.dart';
 
 class DrawerTile extends StatelessWidget {
+
+  Route routes(RouteSettings settings) {
+    if (settings.name == '/page1') {
+      return MaterialPageRoute(
+        builder: (context) {
+          return LoginScreen();
+        },
+      );
+    } else {
+      return MaterialPageRoute(
+        builder: (context) {
+          return LoginScreen();
+        },
+      );
+    }
+  }
 
   final IconData icon; //metodo para o icone
   final String text; //metodo para o texto
@@ -15,7 +32,7 @@ class DrawerTile extends StatelessWidget {
       child: InkWell(
         child: GestureDetector(
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => page),
             );
@@ -51,9 +68,25 @@ class DrawerTile extends StatelessWidget {
 
 class DrawerExit extends StatelessWidget {
 
+  Route routes(RouteSettings settings) {
+    if (settings.name == '/page1') {
+      return MaterialPageRoute(
+        builder: (context) {
+          return LoginScreen();
+        },
+      );
+    } else {
+      return MaterialPageRoute(
+        builder: (context) {
+          return LoginScreen();
+        },
+      );
+    }
+  }
+
   final IconData icon; //metodo para o icone
   final String text; //metodo para o texto
-  final int pop;
+  final String pop;
   DrawerExit(this.icon, this.text, this.pop); //quando for criado o drawer tile passara um icone e um texto
   @override
   Widget build(BuildContext context) {
@@ -62,10 +95,7 @@ class DrawerExit extends StatelessWidget {
       child: InkWell(
         child: GestureDetector(
           onTap: () {
-            int count = 0;
-            Navigator.popUntil(context, (route) {
-              return count++ == 2;
-            });
+            Navigator.of(context).pushNamed('${pop}');
           },
           child: Container(
             padding: EdgeInsets.only(top: 0, left: 0, right: 30,),
