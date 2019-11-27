@@ -87,6 +87,11 @@ class ApiService {
   static Future<List<dynamic>> getEstante(int postId) async {
     return await _get('${Urls.BASE_API_URL}/usuario/estante/$postId');
   }
+
+  static Future<List<dynamic>> getRecomendacao(int postId) async {
+    return await _get('${Urls.BASE_API_URL}/sugestao/$postId');
+  }
+
   static Future<List<dynamic>> deleteEstante(int postId) async {
     return await _delete('${Urls.BASE_API_URL}/usuario/estante/$postId');
   }
@@ -106,6 +111,10 @@ class ApiService {
     print('Response body: ${response.body}');
     print(await http.read('${Urls.BASE_API_URL}/$postId/topico'));
 
+  }
+
+  static Future<List<Livro>> getBooksbyId(int postId) async {
+    return await _get('${Urls.BASE_API_URL}/livro/$postId/');
   }
 
   static Future<List<Livro>> getBooks(String query) async {
