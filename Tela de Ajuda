@@ -1,0 +1,343 @@
+import 'package:bookhub/DrawerTile.dart';
+import 'package:bookhub/TelaCadastroLivros.dart';
+import 'package:bookhub/TeladaEstante.dart';
+import 'package:bookhub/TeladeLogin.dart';
+import 'package:bookhub/TeladePerfil.dart';
+import 'package:bookhub/TeladeRecomandacao.dart';
+import 'package:bookhub/TeladeTopicos.dart';
+import 'package:bookhub/main.dart';
+import 'package:bookhub/models/DataSearch.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+Route routes(RouteSettings settings) {
+  if (settings.name == '/page1') {
+    return MaterialPageRoute(
+      builder: (context) {
+        return LoginScreen();
+      },
+    );
+  } else {
+    return MaterialPageRoute(
+      builder: (context) {
+        return LoginScreen();
+      },
+    );
+  }
+}
+
+
+class TeladeAjuda extends StatefulWidget {
+  @override
+  _TeladeAjudaState createState() => _TeladeAjudaState();
+}
+
+class _TeladeAjudaState extends State<TeladeAjuda> {
+
+  String _nome = "";
+  String _sobrenome = "";
+  String _user = "";
+  int _idAvatar;
+  int _id;
+
+  @override
+  Future<String> getNamePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String name = prefs.getString("nome");
+    return name;
+  }
+
+  Future<String> getSobrenomePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String sobrenome = prefs.getString("sobrenome");
+    return sobrenome;
+  }
+
+  Future<String> getUserPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String user = prefs.getString("login");
+    return user;
+  }
+
+  Future<int> getIdAvatarPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int idAvatar = prefs.getInt("idAvatar");
+    return idAvatar;
+  }
+
+  Future<int> getIdPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt("id");
+    return id;
+  }
+
+  void initState() {
+    getNamePreference().then(updateName);
+    getSobrenomePreference().then(updateSobrenome);
+    getUserPreference().then(updateUser);
+    getIdAvatarPreference().then(updateAvatar);
+    getIdPreference().then(updateId);
+    super.initState();
+  }
+
+  @override
+  Container myBook(String imageVal, String heading) {
+    return Container(
+      width: 160.0,
+      child: Card(
+        child: Wrap(
+          children: <Widget>[
+            Image.network(imageVal),
+            ListTile(
+              title: Text(heading
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget build(BuildContext context) {
+    @override
+    IconButton iconBottom(IconData simbolo, Widget page) {
+      return IconButton(
+        icon: Icon(simbolo),
+        color: Colors.white,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => page),
+          );
+        },
+      );
+    }
+    _buildDrawerBack() =>
+        Container( //criando uma função e dando o nome de build Drawer Back
+          decoration: BoxDecoration( //dentro de um container eu defino um boxdecoration
+              gradient: LinearGradient( //em seguida um gradiente linear
+                colors: [
+                  Color(0xff2A236E),
+                  Color(0xff836FFF), //definindo cores em hexadecimal
+
+                ],
+                begin: Alignment.topLeft, //definindo onde começa
+                end: Alignment.bottomRight, //definindo onde termina
+              )
+          ),
+        );
+    _buildBodyBack() =>
+        Container( //função que cria fundo com degrade que irá retornar um container
+          decoration: BoxDecoration( //box decoration
+              gradient: LinearGradient( //gradiente para um fundo degrade
+                colors: [
+                  Color(0xff2A236E), //definindo cores em hexadecimal
+                  Color(0xff7A74D4),
+
+                ],
+                begin: Alignment.topLeft, //definindo onde o gradiente começa
+                end: Alignment.bottomRight, //definindo onde ele termina
+              )
+          ),
+        );
+
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Bookhub"),
+          backgroundColor: Color(0xff2A236E),
+        ),
+        drawer: Drawer( //criando a classe drawer
+          child: Stack( //como o filho um stack para aparecer por cima da home tab
+            children: <Widget>[
+              _buildDrawerBack(), //chamando a função dentro do widget
+              ListView( // criando listview para exibição de itens
+                padding: EdgeInsets.only(left: 32.0, top: 0.0),
+                //definindo espaçamento na borda a esquerda e no top do drawer
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(bottom: 0.0),
+                    //definindo espaçamento entre o próximo conteudo listado
+                    padding: EdgeInsets.fromLTRB(0.0, 8.0, 16.0, 0.0),
+                    //defindo margens dentro do container
+                    height: 250.0,
+                    child: Stack( // criando um stack para que o texto exibido venha por cima do container caso futurammente precise colocar algo no container
+                      children: <Widget>[
+                        DrawerHeader(
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  width: 120,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                    boxShadow: [BoxShadow(
+                                      color: Color(0xff2A236E),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 0),
+                                    ),
+                                    ],
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(avatar(_idAvatar)),
+                                    ),
+                                  ),
+
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        Container(
+                          padding: EdgeInsets.only(
+                            top: 165, left: 50, right: 30,), //defindo margem
+                          child: Column(
+                            children: <Widget>[
+                              Text("${_nome} ${_sobrenome}",
+                                style: TextStyle(fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              Text("@${_user}",
+                                style: TextStyle(
+                                    fontSize: 15.0, color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                      padding: EdgeInsets.only(top: 0, left: 0, right: 30,),
+                      //defindo margem
+                      child: Column(
+                        children: <Widget>[
+                          DrawerTile(Icons.book, "Cadastro de Livros",
+                              CadastroLivros()),
+                          DrawerTile(
+                              Icons.star, "Recomendações", Recomendacao()),
+                          DrawerTile(Icons.help, "Ajuda", TeladeAjuda()),
+                          DrawerExit(Icons.exit_to_app, "Sair", '/page1'),
+                        ],
+                      )
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Color(0xff2A236E),
+          child: new Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              iconBottom(Icons.person, TelaPerfil()),
+              iconBottom(Icons.local_library, Estante()),
+              iconBottom(Icons.menu, Home()),
+              iconBottom(Icons.toc, Topicos()),
+            ],
+          ),
+        ),
+        backgroundColor: Colors.white,
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: <Widget>[
+
+            Image.network("http://chegadelivros.com.br/wp-content/uploads/2016/07/amazing-libraries-27__880.jpg"),
+              Positioned(
+                top: 200,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                      color: Color(0xff2A236E),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+
+                  )
+                  ),
+                  child: ListView(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        "Olá ${_nome}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontFamily: 'Tahoma'
+                        ),
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Text(
+                        "Tem algum problema ou sugestão?\n Entre em contato com o nosso time\n atráves do e-mail: help.bookhub@gmail.com",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontFamily: 'Tahoma'
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        child: Image.network("https://i.imgur.com/V2CfTHR.png"),
+                      )
+                    ],
+                  )
+              )
+              )
+            ],
+
+          ),
+        )
+    );
+  }
+
+  void updateName(String nome) {
+    setState(() {
+      this._nome = nome;
+    });
+  }
+
+  void updateSobrenome(String sobrenome) {
+    setState(() {
+      this._sobrenome = sobrenome;
+    });
+  }
+
+  void updateUser(String user) {
+    setState(() {
+      this._user = user;
+    });
+  }
+
+  void updateAvatar(int idAvatar) {
+    setState(() {
+      this._idAvatar = idAvatar;
+    });
+  }
+
+  void updateId(int id) {
+    setState(() {
+      this._id = id;
+    });
+  }
+
+}
