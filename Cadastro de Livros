@@ -1,14 +1,72 @@
+import 'package:Bookhub/recomendacao.dart';
 import 'package:flutter/material.dart';
 import 'package:Bookhub/drawertile.dart';
 import 'package:Bookhub/main.dart';
 import 'package:Bookhub/tela_perfil.dart';
 import 'package:Bookhub/login.dart';
 import 'package:Bookhub/estante.dart';
-import 'package:Bookhub/models/usuario.dart';
 import 'package:Bookhub/topicos.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CadastroLivros extends StatelessWidget {
-  Usuario userLogado;
+Route routes(RouteSettings settings) {
+  if (settings.name == '/page1') {
+    return MaterialPageRoute(
+      builder: (context) {
+        return LoginScreen();
+      },
+    );
+  } else {
+    return MaterialPageRoute(
+      builder: (context) {
+        return LoginScreen();
+      },
+    );
+  }
+}
+
+class CadastroLivros extends StatefulWidget {
+  @override
+  _CadastroLivrosState createState() => _CadastroLivrosState();
+}
+
+class _CadastroLivrosState extends State<CadastroLivros> {
+  String _nome = "";
+  String _sobrenome = "";
+  String _user = "";
+  int _idAvatar;
+  @override
+
+  Future<String> getNamePreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String name = prefs.getString("nome");
+    return name;
+  }
+
+  Future<String> getSobrenomePreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String sobrenome = prefs.getString("sobrenome");
+    return sobrenome;
+  }
+
+  Future<String> getUserPreference() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String user = prefs.getString("login");
+    return user;
+  }
+
+Future<int> getIdAvatarPreference() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int idAvatar = prefs.getInt("idAvatar");
+  return idAvatar;
+}
+
+void initState() {
+  getNamePreference().then(updateName);
+  getSobrenomePreference().then(updateSobrenome);
+  getUserPreference().then(updateUser);
+  getIdAvatarPreference().then(updateAvatar);
+  super.initState();
+}
 TextEditingController livroController = TextEditingController();
 TextEditingController autorController = TextEditingController();
 TextEditingController editoraController = TextEditingController();
@@ -89,7 +147,7 @@ return mensagem;
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
-              print("elas que lutem");
+              initState();
             },
           ),
         ],
@@ -115,12 +173,24 @@ return mensagem;
                           alignment: Alignment.center,
                           child: Column(
                             children: <Widget>[
-                              Material(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(50.0)),
-                                child: Image.network(
-                                  "", width: 120.0,
-                                  height: 120.0,),
+                              Container(
+                                width:120,
+                                height:120,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  boxShadow: [BoxShadow(
+                                    color: Color(0xff2A236E),
+                                    blurRadius: 20,
+                                    offset: Offset(0, 0),
+                                  ),
+                                  ],
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage (avatar(_idAvatar)),
+                                  ),
+                                ),
+
                               )
                             ],
                           ),
@@ -132,12 +202,12 @@ return mensagem;
                           top: 165, left: 50, right: 30,), //defindo margem
                         child: Column(
                           children: <Widget>[
-                            Text("Nome da Pessoa",
+                            Text("${_nome} ${_sobrenome}",
                               style: TextStyle(fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
-                            Text("@username",
+                            Text("@${_user}",
                               style: TextStyle(
                                   fontSize: 15.0, color: Colors.white),
                             ),
@@ -153,11 +223,9 @@ return mensagem;
                     child: Column(
                       children: <Widget>[
                         DrawerTile(Icons.book, "Cadastro de Livros", CadastroLivros()),
-                        DrawerTile(Icons.chat, "Chat", LoginScreen()),
-                        //defindo os icones ddo drawer
-                        DrawerTile(Icons.settings, "Configuração", LoginScreen()),
+                        DrawerTile(Icons.star, "Recomendações", Recomendacao()),
                         DrawerTile(Icons.help, "Ajuda", LoginScreen()),
-                        DrawerTile(Icons.exit_to_app, "Sair", LoginScreen()),
+                        DrawerExit(Icons.exit_to_app, "Sair", '/page1'),
                       ],
                     )
                 ),
@@ -175,7 +243,6 @@ return mensagem;
             iconBottom(Icons.person, TelaPerfil()),
             iconBottom(Icons.bookmark_border, Estante()),
             iconBottom(Icons.menu, Home()),
-            iconBottom(Icons.location_on, LoginScreen()),
             iconBottom(Icons.toc, Topicos()),
           ],
         ),
@@ -233,5 +300,31 @@ return mensagem;
       ),
       );
   }
+  void updateName(String nome){
+
+    setState((){
+      this._nome = nome;
+    });
+  }
+  void updateSobrenome(String sobrenome){
+
+    setState((){
+      this._sobrenome = sobrenome;
+    });
+  }
+
+  void updateUser (String user){
+
+    setState((){
+      this._user = user;
+    });
+  }
+  void updateAvatar(int idAvatar){
+
+    setState((){
+      this._idAvatar = idAvatar;
+    });
+  }
 }
+
 
