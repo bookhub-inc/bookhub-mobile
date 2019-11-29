@@ -1,15 +1,15 @@
 import 'dart:convert';
-import "package:flutter/material.dart";
-import 'package:Bookhub/tela_perfil.dart';
-import 'package:Bookhub/drawertile.dart';
-import 'package:Bookhub/login.dart';
-import 'package:Bookhub/cadastrolivros.dart';
-import 'package:Bookhub/estante.dart';
-import 'package:Bookhub/topicos.dart';
-import 'package:Bookhub/main.dart';
-import 'package:Bookhub/data_search.dart';
-import 'package:Bookhub/api.dart';
-import 'package:Bookhub/models/livros.dart';
+import 'package:bookhub/API.dart';
+import 'package:bookhub/DrawerTile.dart';
+import 'package:bookhub/TelaCadastroLivros.dart';
+import 'package:bookhub/TeladaEstante.dart';
+import 'package:bookhub/TeladeLogin.dart';
+import 'package:bookhub/TeladePerfil.dart';
+import 'package:bookhub/TeladeTopicos.dart';
+import 'package:bookhub/main.dart';
+import 'package:bookhub/models/DataSearch.dart';
+import 'package:bookhub/models/livro.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -146,15 +146,6 @@ class RecomendacaoState extends State<Recomendacao> {
       appBar: AppBar(
         title: Text("Bookhub"),
         backgroundColor: Color(0xff2A236E),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add_circle),
-            iconSize: 35,
-            onPressed: () {
-              showSearch(context: context, delegate: DataSearch(_id));
-            },
-          ),
-        ],
       ),
       drawer: Drawer( //criando a classe drawer
         child: Stack( //como o filho um stack para aparecer por cima da home tab
@@ -259,98 +250,63 @@ class RecomendacaoState extends State<Recomendacao> {
             future: ApiService.getRecomendacao(_id),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                FutureBuilder(
-                  future: ApiService.getBooksbyId(int.parse(snapshot.data['itemID'])),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      final books = snapshot.data;
-                      return ListView.separated(
-                        separatorBuilder: (context, index) =>
-                            Divider(
-                              color: Colors.black,
-                            ),
-                        itemBuilder: (context, index) {
-                          return SingleChildScrollView(
-                            child: Card(
-                              elevation: 5,
-                              child: Container(
-                                height: 100,
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      height: 120,
-                                      width: 70,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(5),
-                                            topLeft: Radius.circular(5),
-                                          ),
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                  "${books[index]['url']}")
-                                          )
-                                      ),
+                final books = snapshot.data;
+                return ListView.separated(
+                  separatorBuilder: (context, index) => Divider(
+                    color: Colors.black,
+                  ),
+                  itemBuilder: (context, index) {
+                    return SingleChildScrollView(
+                      child: Card(
+                        elevation: 5,
+                        child: Container(
+                          height: 100,
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                height: 120,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(5),
+                                      topLeft: Radius.circular(5),
                                     ),
-                                    Expanded(
-                                      child:
-                                      SingleChildScrollView(
-                                          child:
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .stretch,
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .start,
-                                            children: <Widget>[
-                                              Text(
-                                                  "Nome do Livro: ${books[index]['nome']}",
-                                                  style: TextStyle(fontSize: 15,
-                                                      fontWeight: FontWeight
-                                                          .bold)),
-                                              Text(
-                                                  "Autor: ${books[index]['autor']}",
-                                                  style: TextStyle(fontSize: 15,
-                                                      fontWeight: FontWeight
-                                                          .bold)),
-                                              Text(
-                                                  "Numero de Páginas: ${books[index]['npaginas']}",
-                                                  style: TextStyle(fontSize: 15,
-                                                      fontWeight: FontWeight
-                                                          .bold)),
-                                              Text(
-                                                  "Nota: ${books[index]['nota']}",
-                                                  style: TextStyle(fontSize: 15,
-                                                      fontWeight: FontWeight
-                                                          .bold)),
-
-                                            ],
-                                          )
-                                      ),
-                                    ),
-                                  ],
+                                    image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage("${books[index]['url']}")
+                                    )
                                 ),
                               ),
+                              Expanded(
+                                child:
+                                SingleChildScrollView(
+                                    child:
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text("Nome do Livro: ${books[index]['nome']}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                        Text("Autor: ${books[index]['autor']}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                        Text("Numero de Páginas: ${books[index]['npaginas']}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                        Text("Nota: ${books[index]['nota']}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                      ],
+                                    )
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
 
-                            ),
-                          );
-                        },
-                        itemCount: books.length,
-                      );
-                    }
-
-                    return Center(
-                      child: CircularProgressIndicator(),
+                      ),
                     );
                   },
+                  itemCount: books.length,
                 );
               }
-
               return Center(
-                    child:
-                    CircularProgressIndicator(),
-
+                child: CircularProgressIndicator(),
               );
-            }
+            },
           ),
         ],
 
